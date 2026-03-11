@@ -1,0 +1,108 @@
+---
+const TRACK_HEIGHT = 200;
+const PAD = 32;
+
+const sections = [
+	{ id: 'article',   label: 'Chapter 1 — Foundations' },
+	{ id: 'chapter-2', label: 'Chapter 2 — Adult Court' },
+	{ id: 'chapter-3', label: 'Chapter 3 — Rehabilitation' },
+];
+---
+
+<!--
+	The <nav> itself is the rectangular hover target.
+	It is wide enough to cover labels and tall enough to cover the full track + padding.
+	pointer-events toggled by JS when hero leaves view.
+-->
+<nav
+	id="side-nav"
+	aria-label="Article sections"
+	class="group pointer-events-none fixed left-0 top-1/2 z-40 hidden -translate-y-1/2 opacity-0 transition-opacity duration-500 md:block"
+	style={`width: 220px; height: ${TRACK_HEIGHT + PAD * 2}px;`}
+>
+	<!-- track background -->
+	<div
+		class="absolute w-px bg-black/20"
+		style={`left: 24px; top: ${PAD}px; bottom: ${PAD}px;`}
+	></div>
+
+	<!-- scroll progress fill -->
+	<div
+		id="snr-fill"
+		class="absolute w-px bg-black"
+		style={`left: 24px; top: ${PAD}px; height: 0px; transition: height 180ms ease-out;`}
+	></div>
+
+	<!-- section links -->
+	{sections.map((section, i) => {
+		const top = PAD + (i === 0 ? 0 : (i / (sections.length - 1)) * TRACK_HEIGHT);
+		return (
+			<a
+				href={`#${section.id}`}
+				class="absolute flex -translate-y-1/2 items-center text-black transition-transform duration-200 hover:translate-x-2 hover:text-[#780000]"
+				style={`top: ${top}px; left: 34px;`}
+			>
+				<span class="snr-label inline-block whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.12em] text-current opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+					{section.label}
+				</span>
+			</a>
+		);
+	})}
+</nav>
+
+<script>
+	(() => {
+		const nav   = document.getElementById('side-nav');
+		const fill  = document.getElementById('snr-fill');
+		const hero  = document.getElementById('hero');
+		const TRACK = 200;
+		const IDS   = ['article', 'chapter-2', 'chapter-3'];
+
+		function getEl(id: string): HTMLElement | null {
+			return document.getElementById(id);
+		}
+
+		function update() {
+			if (!fill || !nav) return;
+
+			if (hero) {
+				const heroBottom = hero.getBoundingClientRect().bottom;
+				if (heroBottom <= 0) {
+					nav.style.opacity = '1';
+					nav.classList.remove('pointer-events-none');
+				} else {
+					nav.style.opacity = '0';
+					nav.classList.add('pointer-events-none');
+					return;
+				}
+			}
+
+			const dividers = document.querySelectorAll('.chapter-divider');
+			const anyDividerVisible = Array.from(dividers).some((d) => {
+				const rect = d.getBoundingClientRect();
+				return rect.top < window.innerHeight && rect.bottom > 0;
+			});
+			if (anyDividerVisible) {
+				nav.style.opacity = '0';
+				nav.classList.add('pointer-events-none');
+				return;
+			}
+
+			const first = getEl(IDS[0]);
+			const last  = getEl(IDS[IDS.length - 1]);
+			if (!first || !last) return;
+
+			const scrollY  = window.scrollY;
+			const mid      = scrollY + window.innerHeight * 0.5;
+			const start    = first.getBoundingClientRect().top + scrollY;
+			const end      = last.getBoundingClientRect().top  + scrollY + last.getBoundingClientRect().height;
+			const progress = Math.max(0, Math.min(1, (mid - start) / (end - start)));
+
+			fill.style.height = `${progress * TRACK}px`;
+		}
+
+		window.addEventListener('scroll', update, { passive: true });
+		window.addEventListener('load', update);
+		update();
+	})();
+</script>

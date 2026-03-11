@@ -1,0 +1,34 @@
+---
+interface Props {
+	id?: string;
+	chapter: string;
+	title: string;
+}
+
+const { id, chapter, title } = Astro.props;
+---
+
+<section id={id} class="chapter-divider relative flex min-h-screen items-center overflow-hidden bg-[#00090e] text-[#fdf0d5]">
+	<div class="mx-auto w-full max-w-7xl px-8 md:px-16">
+		<p class="text-center text-4xl font-semibold tracking-tight text-[#669bbc]" data-animate>{chapter}</p>
+		<h2
+			class="mx-auto mt-8 max-w-5xl text-center text-5xl font-black leading-none text-[#fdf0d5] md:mt-12 md:text-8xl"
+			data-animate
+		>
+			{title}
+		</h2>
+	</div>
+</section>
+
+<style>
+	.chapter-divider [data-animate] {
+		opacity: 0;
+		transform: translateY(28px);
+		transition: opacity 650ms ease, transform 650ms ease;
+	}
+
+	.chapter-divider.in-view [data-animate] {
+		opacity: 1;
+		transform: translateY(0);
+	}
+</style>
