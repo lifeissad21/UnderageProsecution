@@ -1,11 +1,13 @@
 ---
-const TRACK_HEIGHT = 200;
+const TRACK_HEIGHT = 280;
 const PAD = 32;
 
 const sections = [
-	{ id: 'article',   label: 'Chapter 1 — Foundations' },
-	{ id: 'chapter-2', label: 'Chapter 2 — Adult Court' },
-	{ id: 'chapter-3', label: 'Chapter 3 — Rehabilitation' },
+	{ id: 'intro',       label: 'Introduction' },
+	{ id: 'history',     label: 'Ch. 1 — History' },
+	{ id: 'prosecution', label: 'Ch. 2 — Prosecution' },
+	{ id: 'issues',      label: 'Ch. 3 — Issues' },
+	{ id: 'conclusion',  label: 'Conclusion' },
 ];
 ---
 
@@ -55,8 +57,8 @@ const sections = [
 		const nav   = document.getElementById('side-nav');
 		const fill  = document.getElementById('snr-fill');
 		const hero  = document.getElementById('hero');
-		const TRACK = 200;
-		const IDS   = ['article', 'chapter-2', 'chapter-3'];
+		const TRACK = 280;
+		const IDS   = ['intro', 'history', 'prosecution', 'issues', 'conclusion'];
 
 		function getEl(id: string): HTMLElement | null {
 			return document.getElementById(id);

@@ -1,8 +1,11 @@
 ---
-import ChapterDivider from '../components/ChapterDivider.astro';
 import HeroSection from '../components/HeroSection.astro';
-import ReferenceSup from '../components/ReferenceSup.astro';
 import SideNav from '../components/SideNav.astro';
+import ChapterIntro from '../components/chapters/ChapterIntro.astro';
+import ChapterHistory from '../components/chapters/ChapterHistory.astro';
+import ChapterCurrentProsecution from '../components/chapters/ChapterCurrentProsecution.astro';
+import ChapterIssues from '../components/chapters/ChapterIssues.astro';
+import ChapterConclusion from '../components/chapters/ChapterConclusion.astro';
 import '../styles/global.css'
 ---
 
@@ -18,15 +21,26 @@ import '../styles/global.css'
 	<body class="bg-[#f7f5f2] text-black antialiased">
 		<header
 			id="site-header"
-			class="fixed inset-x-0 top-0 z-50 border-b border-black/10 bg-[#f7f5f2]/95 shadow-sm backdrop-blur"
+			class="invisible fixed inset-x-0 top-0 z-50 border-b border-black/10 bg-[#f7f5f2]/95 shadow-sm backdrop-blur"
 			style="opacity: 0;"
 		>
 			<div class="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
 				<p id="current-chapter" class="pointer-events-none absolute left-1/2 hidden -translate-x-1/2 text-sm font-semibold uppercase tracking-wide text-black/70 transition-all duration-250 md:block">
-					Chapter 1 - Foundations of Juvenile Responsibility
+				Introduction
 				</p>
-				<nav aria-label="Main navigation" class="ml-auto text-sm font-medium text-black/50">
+				<nav aria-label="Main navigation" class="ml-auto flex items-center gap-5 text-sm font-medium text-black/50">
 					<a class="transition hover:text-black" href="#references">References</a>
+					<a
+						href="/article.pdf"
+						download
+						class="inline-flex items-center rounded border border-black/20 bg-white p-2 text-black/70 transition hover:border-black/40 hover:text-black"
+						aria-label="Download article as PDF"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+							<path d="M10.75 2.75a.75.75 0 0 0-1.5 0v8.614L6.295 8.235a.75.75 0 1 0-1.09 1.03l4.25 4.5a.75.75 0 0 0 1.09 0l4.25-4.5a.75.75 0 0 0-1.09-1.03l-2.955 3.129V2.75Z" />
+							<path d="M3.5 12.75a.75.75 0 0 0-1.5 0v2.5A2.75 2.75 0 0 0 4.75 18h10.5A2.75 2.75 0 0 0 18 15.25v-2.5a.75.75 0 0 0-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5Z" />
+						</svg>
+					</a>
 				</nav>
 			</div>
 		</header>
@@ -36,169 +50,33 @@ import '../styles/global.css'
 		<main>
 			<HeroSection />
 
-			<section id="article" class="mx-auto max-w-2xl px-6 py-24">
-				<article class="space-y-10 text-[1.125rem] leading-[1.85] text-black">
-					<p>
-						Underage prosecution sits at the intersection of public safety, developmental psychology, and legal
-						ethics. Courts are often asked to evaluate not only what happened, but also who the accused person was
-						at the time of the event. Adolescents process risk, peer pressure, and long-term consequences
-						differently than adults, which means legal systems must decide how punishment and intervention should be
-						calibrated.
-						<ReferenceSup
-							number={1}
-							href="https://www.ojjdp.gov/ojstatbb/structure_process/qa04102.asp?qaDate=2024"
-							label="Office of Juvenile Justice and Delinquency Prevention - Juvenile Court Process Overview"
-						/>
-					</p>
-
-					<!-- pull quote -->
-					<div class="py-4">
-						<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
-						<p class="text-[1.35rem] font-bold leading-snug text-black">
-							The juvenile system is built on a single premise: young people can change.
-						</p>
-					</div>
-
-					<p>
-						In many jurisdictions, proceedings emphasize education plans, counseling, restorative practices, and
-						family participation over incarceration. This model assumes that timely support can reduce repeat
-						offenses and improve long-term outcomes. It also acknowledges that behavior in adolescence is not
-						always a reliable predictor of adult conduct.
-						<ReferenceSup
-							number={2}
-							href="https://www.ncbi.nlm.nih.gov/books/NBK53420/"
-							label="National Academies - Reforming Juvenile Justice: A Developmental Approach"
-						/>
-					</p>
-				</article>
-			</section>
-
-			<div class="mx-auto max-w-2xl px-6 pb-24">
-				<figure>
-					<img
-						src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=1400&q=80"
-						alt="Rows of legal books in a law library"
-						class="w-full object-cover"
-						style="height: 420px;"
-						loading="lazy"
-					/>
-					<figcaption class="mt-3 text-[0.8rem] leading-relaxed text-black/40">
-						Photo: Unsplash / <a href="https://unsplash.com/photos/1521587760476" target="_blank" rel="noopener noreferrer" class="underline hover:text-black">Alfons Morales</a> — Law library collection, used for editorial illustration.
-					</figcaption>
-				</figure>
-			</div>
-
-			<ChapterDivider id="chapter-2" chapter="Chapter 2" title="When Does a Case Move to Adult Court?" />
-
-			<section class="mx-auto max-w-2xl px-6 py-24">
-				<article class="space-y-10 text-[1.125rem] leading-[1.85] text-black">
-					<p>
-						Some cases involve severe harm or repeated violent conduct. Prosecutors may petition to move a matter
-						into adult court, arguing that the seriousness of the offense outweighs the protections of the juvenile
-						framework. Transfer decisions are typically influenced by age, prior record, weapon use, public impact,
-						and expert evaluations regarding maturity and amenability to treatment.
-					</p>
-
-					<!-- pull quote -->
-					<div class="py-4">
-						<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
-						<p class="text-[1.35rem] font-bold leading-snug text-black">
-							The core question is always the same: can accountability be achieved without discarding development?
-						</p>
-					</div>
-
-					<p>
-						Judges reviewing transfer requests assess whether juvenile court resources can realistically address
-						the specific conduct at issue. This includes reviewing intervention programs, school records,
-						probation history, and psychological assessments.
-					</p>
-				</article>
-			</section>
-
-			<div class="mx-auto max-w-2xl px-6 pb-24">
-				<figure>
-					<img
-						src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=80"
-						alt="Courtroom bench and legal documents"
-						class="w-full object-cover"
-						style="height: 420px;"
-						loading="lazy"
-					/>
-				<figcaption class="mt-3 text-[0.8rem] leading-relaxed text-black/40">
-						Photo: Unsplash / <a href="https://unsplash.com/photos/1450101499163" target="_blank" rel="noopener noreferrer" class="underline hover:text-black">Scott Graham</a> — Legal documents and courtroom materials, used for editorial illustration.
-					</figcaption>
-				</figure>
-			</div>
-
-			<ChapterDivider id="chapter-3" chapter="Chapter 3" title="Balancing Accountability and Rehabilitation" />
-
-			<section class="mx-auto max-w-2xl px-6 py-24">
-				<article class="space-y-10 text-[1.125rem] leading-[1.85] text-black">
-					<p>
-						Defense advocacy in underage prosecution often focuses on context: trauma exposure, educational gaps,
-						unmet mental health needs, and unstable home environments. These factors do not erase accountability,
-						but they can shape sentencing alternatives. Programs that combine supervision with structured support
-						often report better outcomes than punitive responses alone.
-					</p>
-
-					<!-- pull quote -->
-					<div class="py-4">
-						<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
-						<p class="text-[1.35rem] font-bold leading-snug text-black">
-							Systems that align accountability with rehabilitation respond to serious conduct without abandoning
-							the realities of adolescence.
-						</p>
-					</div>
-
-					<p>
-						Policy debates continue over where to draw the line between deterrence and compassion. Victim-centered
-						voices call for meaningful consequences and recognition of harm, while reform advocates emphasize the
-						capacity of youth to change. Legislatures and courts increasingly use outcome data to evaluate which
-						approaches lower recidivism and improve community safety.
-						<ReferenceSup
-							number={3}
-							href="https://www.sentencingproject.org/reports/youth-justice-by-the-numbers/"
-							label="The Sentencing Project - Youth Justice By The Numbers"
-						/>
-					</p>
-
-					<p>
-						A modern framework for underage prosecution requires nuance: clear legal standards, consistent due
-						process, and evidence-based interventions. When these elements align, courts can respond to serious
-						conduct without discarding the developmental realities of adolescence.
-					</p>
-
-					<figure>
-						<img
-							src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?auto=format&fit=crop&w=1400&q=80"
-							alt="Person writing notes during legal case preparation"
-							class="w-full object-cover"
-							style="height: 420px;"
-							loading="lazy"
-						/>
-						<figcaption class="mt-3 text-[0.8rem] leading-relaxed text-black/40">
-							Photo: Unsplash / <a href="https://unsplash.com/photos/1589578527966" target="_blank" rel="noopener noreferrer" class="underline hover:text-black">Sora Shimazaki</a> — Case preparation notes, used for editorial illustration.
-						</figcaption>
-					</figure>
-				</article>
-			</section>
+			<ChapterIntro />
+			<ChapterHistory />
+			<ChapterCurrentProsecution />
+			<ChapterIssues />
+			<ChapterConclusion />
 
 			<section id="references" class="mx-auto max-w-2xl px-6 py-24">
 				<h3 class="text-2xl font-bold text-black">References</h3>
 				<ol class="mt-6 list-decimal space-y-4 pl-6 text-base leading-relaxed text-black">
 					<li>
-						<a class="underline hover:text-[#780000]" href="https://www.ojjdp.gov/ojstatbb/structure_process/qa04102.asp?qaDate=2024" target="_blank" rel="noopener noreferrer">
-							Office of Juvenile Justice and Delinquency Prevention - Juvenile Court Process Overview
+						<a class="underline hover:text-[#780000]" href="https://en.wikipedia.org/wiki/Kissing_Case" target="_blank" rel="noopener noreferrer">
+							Wikipedia. "Kissing Case."
 						</a>
 					</li>
 					<li>
-						<a class="underline hover:text-[#780000]" href="https://www.ncbi.nlm.nih.gov/books/NBK53420/" target="_blank" rel="noopener noreferrer">
-							National Academies - Reforming Juvenile Justice: A Developmental Approach
+						<a class="underline hover:text-[#780000]" href="https://upload.wikimedia.org/wikipedia/en/4/47/Kissing_Case.jpg" target="_blank" rel="noopener noreferrer">
+							Wikimedia image file: "Kissing_Case.jpg" (photo used in History section).
 						</a>
 					</li>
 					<li>
-						<a class="underline hover:text-[#780000]" href="https://www.sentencingproject.org/reports/youth-justice-by-the-numbers/" target="_blank" rel="noopener noreferrer">
-							The Sentencing Project - Youth Justice By The Numbers
+						<a class="underline hover:text-[#780000]" href="https://jjie.org/2017/02/27/juvenile-justice-reforms-went-backwards-in-the-90s/" target="_blank" rel="noopener noreferrer">
+							Juvenile Justice Information Exchange. "Juvenile Justice Reforms Went Backwards in the '90s."
+						</a>
+					</li>
+					<li>
+						<a class="underline hover:text-[#780000]" href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/pubs/tryingjuvasadult/transfer.html" target="_blank" rel="noopener noreferrer">
+							Office of Juvenile Justice and Delinquency Prevention. "Trying Juveniles as Adults: An Analysis of State Transfer Laws and Reporting."
 						</a>
 					</li>
 				</ol>
@@ -218,10 +96,16 @@ import '../styles/global.css'
 			const chapterDividers = document.querySelectorAll('.chapter-divider');
 			const chapterLabel = document.querySelector('#current-chapter');
 			const chapterMap = [
-				{ id: 'article', label: 'Chapter 1 - Foundations of Juvenile Responsibility' },
-				{ id: 'chapter-2', label: 'Chapter 2 - When Does a Case Move to Adult Court?' },
-				{ id: 'chapter-3', label: 'Chapter 3 - Balancing Accountability and Rehabilitation' },
-				{ id: 'references', label: 'References' },
+				{ id: 'intro',               label: 'Introduction' },
+				{ id: 'chapter-history',     label: 'Chapter 1 — History' },
+				{ id: 'history',             label: 'Chapter 1 — History' },
+				{ id: 'chapter-prosecution', label: 'Chapter 2 — Current Prosecution' },
+				{ id: 'prosecution',         label: 'Chapter 2 — Current Prosecution' },
+				{ id: 'chapter-issues',      label: 'Chapter 3 — Current Issues' },
+				{ id: 'issues',              label: 'Chapter 3 — Current Issues' },
+				{ id: 'chapter-conclusion',  label: 'Conclusion' },
+				{ id: 'conclusion',          label: 'Conclusion' },
+				{ id: 'references',          label: 'References' },
 			];
 
 			let heroInView = true;
@@ -240,6 +124,7 @@ import '../styles/global.css'
 
 				if (shouldShow && !headerIsVisible) {
 					headerIsVisible = true;
+					h.classList.remove('invisible');
 					h.style.transition = 'opacity 450ms ease-out';
 					requestAnimationFrame(() => requestAnimationFrame(() => { h.style.opacity = '1'; }));
 				} else if (!shouldShow && headerIsVisible) {
@@ -253,6 +138,8 @@ import '../styles/global.css'
 						h.style.transition = 'opacity 350ms ease-in';
 						h.style.opacity = '0';
 					}
+				} else if (!shouldShow) {
+					h.classList.add('invisible');
 				}
 			};
 

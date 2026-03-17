@@ -1,0 +1,121 @@
+---
+import ChapterDivider from '../ChapterDivider.astro';
+import ReferenceSup from '../ReferenceSup.astro';
+---
+
+<ChapterDivider
+	id="chapter-history"
+	chapter="Chapter 1"
+	title="History of Underage Prosecution"
+/>
+
+<section id="history" class="mx-auto max-w-2xl px-6 py-24">
+	<article class="space-y-10 text-[1.125rem] leading-[1.85] text-black">
+
+		<p>
+			The history of underage prosecution in the United States includes cases where race,
+			fear, and public pressure shaped outcomes more than fairness or child welfare. One of
+			the starkest examples is the 1958 "Kissing Case" from Monroe, North Carolina
+			<ReferenceSup
+				number={1}
+				href="https://en.wikipedia.org/wiki/Kissing_Case"
+				label="Wikipedia: Kissing Case"
+			/>.
+		</p>
+
+		<!-- Pull quote -->
+		<div class="py-4">
+			<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
+			<p class="text-[1.35rem] font-bold leading-snug text-black">
+				"They just punched us all in the stomach and back and legs. We were hollering and
+				screaming. We thought they were going to kill us."
+			</p>
+		</div>
+
+		<!-- ─────────────────────────────────────────────── -->
+		<!-- Subchapter: Sample Case + Statistics            -->
+		<!-- ─────────────────────────────────────────────── -->
+		<h3 id="history-kissing-case" class="pt-8 text-2xl font-bold text-black">
+			The Kissing Case and Its Legacy
+		</h3>
+
+		<p>
+			In October 1958 in Monroe, North Carolina, 9-year-old James Hanover Thompson and
+			his 8-year-old friend David "Fuzzy" Simpson were playing with white children when a
+			kissing game began. During the game, a white girl, Sissy Sutton, kissed David on the
+			cheek first. After she told her parents, police confronted the boys at gunpoint,
+			shouting racial epithets and calling them "little rapists". The boys were beaten and
+			reportedly threatened again on Halloween by officers dressed as Klansmen
+			<ReferenceSup
+				number={1}
+				href="https://en.wikipedia.org/wiki/Kissing_Case"
+				label="Wikipedia: Kissing Case"
+			/>.
+		</p>
+
+		<p>
+			The children were charged with assault and molestation, found guilty under the
+			segregation-era legal system, and sent to a reformatory for what could have been the
+			rest of their childhood. Media coverage, NAACP advocacy, and public outrage turned
+			the case into an international symbol of injustice. Under mounting pressure, North
+			Carolina Governor Luther H. Hodges pardoned both boys on February 13, 1959
+			<ReferenceSup
+				number={1}
+				href="https://en.wikipedia.org/wiki/Kissing_Case"
+				label="Wikipedia: Kissing Case"
+			/>.
+		</p>
+
+		<figure class="space-y-3">
+			<img
+				src="https://upload.wikimedia.org/wikipedia/en/4/47/Kissing_Case.jpg"
+				alt="James Hanover Thompson and David Simpson after the failed hearing in the Kissing Case"
+				class="w-full rounded-md border border-black/10"
+				loading="lazy"
+			/>
+			<figcaption class="text-sm leading-relaxed text-black/60">
+				Picture of the boys after the failed hearing.
+				<ReferenceSup
+					number={2}
+					href="https://upload.wikimedia.org/wikipedia/en/4/47/Kissing_Case.jpg"
+					label="Wikimedia Commons upload: Kissing_Case.jpg"
+				/>
+			</figcaption>
+		</figure>
+
+		<!-- Statistics block -->
+		<div class="rounded-md border border-black/10 bg-white p-6">
+			<p class="text-sm font-semibold uppercase tracking-wide text-black/40">Key Statistics</p>
+			<ul class="mt-4 space-y-3 text-base text-black">
+				<li>46 states and the District of Columbia had laws that enabled transfer of juveniles to adult criminal court <ReferenceSup number={4} href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/pubs/tryingjuvasadult/transfer.html" label="OJJDP: Trying Juveniles as Adults (State Transfer Laws)" />.</li>
+				<li>Most transfer laws were expanded during and after the 1990s "superpredator" panic, even though youth crime trends later declined <ReferenceSup number={3} href="https://jjie.org/2017/02/27/juvenile-justice-reforms-went-backwards-in-the-90s/" label="JJIE: Juvenile Justice Reforms Went Backwards in the '90s" />.</li>
+				<li>Current reform efforts in several states are aimed at narrowing automatic transfer and restoring age-appropriate adjudication pathways <ReferenceSup number={3} href="https://jjie.org/2017/02/27/juvenile-justice-reforms-went-backwards-in-the-90s/" label="JJIE: Juvenile Justice Reforms Went Backwards in the '90s" />.</li>
+			</ul>
+		</div>
+
+		<!-- ─────────────────────────────────────────────── -->
+		<!-- Subchapter: Current Prosecution                 -->
+		<!-- ─────────────────────────────────────────────── -->
+		<h3 id="history-current-prosecution" class="pt-8 text-2xl font-bold text-black">
+			Current Prosecution
+		</h3>
+
+		<p>
+			Later, the mid-1990s peak in violent crime fueled a "superpredator" scare that helped
+			justify laws treating more juveniles like adults. That prediction did not materialize,
+			but many of the laws remained in place long after the panic subsided
+			<ReferenceSup
+				number={3}
+				href="https://jjie.org/2017/02/27/juvenile-justice-reforms-went-backwards-in-the-90s/"
+				label="JJIE: Juvenile Justice Reforms Went Backwards in the '90s"
+			/>.
+		</p>
+
+		<p>
+			Department of Justice reporting on transfer policies shows how broad those laws became,
+			and why current crime trends and reform debates are still reacting to that era's policy
+			choices <ReferenceSup number={4} href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/pubs/tryingjuvasadult/transfer.html" label="OJJDP: Trying Juveniles as Adults (State Transfer Laws)" />.
+		</p>
+
+	</article>
+</section>

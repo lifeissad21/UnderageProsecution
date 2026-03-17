@@ -1,0 +1,213 @@
+---
+// Data: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 & 2018
+const MAX = 11; // percentage scale ceiling — slightly above 9.5% for breathing room
+
+const rows = [
+	{
+		label:   "Total Prevalence Rate",
+		sub:     "All sexual victimization",
+		val2012: 9.5,
+		val2018: 7.1,
+		sig:     true,
+	},
+	{
+		label:   "Youth-on-Youth Victimization",
+		sub:     "Involving force or coercion",
+		val2012: 2.5,
+		val2018: 1.9,
+		sig:     true,
+	},
+	{
+		label:   "Staff Sexual Misconduct",
+		sub:     "All staff-involved incidents",
+		val2012: 7.7,
+		val2018: 5.8,
+		sig:     true,
+	},
+	{
+		label:   "Staff — With Force or Coercion",
+		sub:     "Force or coercion reported",
+		val2012: 3.5,
+		val2018: 2.1,
+		sig:     true,
+	},
+	{
+		label:   "Staff — No Force or Coercion",
+		sub:     "Willing or unknown",
+		val2012: 4.7,
+		val2018: 3.9,
+		sig:     false,
+	},
+];
+
+function barWidth(val: number): string {
+	return ((val / MAX) * 100).toFixed(3) + '%';
+}
+
+function pctChange(v2012: number, v2018: number): number {
+	return Math.round(((v2018 - v2012) / v2012) * 100);
+}
+---
+
+<figure
+	id="vic-chart"
+	class="vic-chart my-2 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm"
+	aria-label="Horizontal bar chart: Youth reporting sexual victimization in juvenile facilities, 2012 vs 2018"
+	role="figure"
+>
+	<!-- ── Header ────────────────────────────────────────── -->
+	<div class="border-b border-black/8 px-6 py-5 md:px-8">
+		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
+			Bureau of Justice Statistics · NSYC
+		</p>
+		<h4 class="mt-1 text-[1.05rem] font-bold leading-tight text-black">
+			Youth Reporting Sexual Victimization in Juvenile Facilities
+		</h4>
+		<p class="mt-0.5 text-[0.82rem] text-black/45">
+			Percent of youth reporting, by incident type — 2012 &amp; 2018
+		</p>
+
+		<!-- Legend -->
+		<div class="mt-4 flex flex-wrap items-center gap-5 text-[0.75rem] font-semibold text-black/60">
+			<span class="flex items-center gap-1.5">
+				<span class="inline-block h-2.5 w-4 rounded-sm bg-[#64748b]"></span>
+				2012
+			</span>
+			<span class="flex items-center gap-1.5">
+				<span class="inline-block h-2.5 w-4 rounded-sm bg-[#c1121f]"></span>
+				2018
+			</span>
+			<span class="ml-auto text-[0.68rem] font-normal text-black/30">
+				Change shown as % relative to 2012
+			</span>
+		</div>
+	</div>
+
+	<!-- ── Chart body ────────────────────────────────────── -->
+	<div class="px-6 py-6 md:px-8">
+		<ul class="space-y-6 list-none p-0 m-0" role="list">
+			{rows.map((row, i) => {
+				const change = pctChange(row.val2012, row.val2018);
+				const w2012  = barWidth(row.val2012);
+				const w2018  = barWidth(row.val2018);
+				const d2012  = `${i * 100}ms`;
+				const d2018  = `${i * 100 + 110}ms`;
+
+				return (
+					<li class="bar-row" style={`--i: ${i};`}>
+						<!-- Row header: label + delta badge -->
+						<div class="mb-2 flex items-start justify-between gap-3">
+							<div>
+								<span class="text-[0.82rem] font-bold text-black">
+									{row.label}
+									{row.sig && <sup class="ml-0.5 text-[0.65em] text-black/40" title="Statistically significant difference from 2012">†</sup>}
+								</span>
+								<span class="ml-1.5 text-[0.73rem] text-black/40">{row.sub}</span>
+							</div>
+							<span class="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-bold tabular-nums text-emerald-700">
+								{change}%
+							</span>
+						</div>
+
+						<!-- 2012 bar -->
+						<div class="mb-1.5 flex items-center gap-3">
+							<span class="w-8 shrink-0 text-right text-[9px] font-semibold uppercase tracking-wide text-black/30">
+								2012
+							</span>
+							<div class="relative h-5 flex-1 overflow-hidden rounded-full bg-black/[0.06]">
+								<div
+									class="bar absolute inset-y-0 left-0 rounded-full bg-[#64748b]"
+									style={`--w: ${w2012}; --delay: ${d2012};`}
+									aria-hidden="true"
+								></div>
+							</div>
+							<span class="w-10 shrink-0 text-right text-xs font-semibold tabular-nums text-black/50">
+								{row.val2012}%
+							</span>
+						</div>
+
+						<!-- 2018 bar -->
+						<div class="flex items-center gap-3">
+							<span class="w-8 shrink-0 text-right text-[9px] font-semibold uppercase tracking-wide text-black/30">
+								2018
+							</span>
+							<div class="relative h-5 flex-1 overflow-hidden rounded-full bg-black/[0.06]">
+								<div
+									class="bar absolute inset-y-0 left-0 rounded-full bg-[#c1121f]"
+									style={`--w: ${w2018}; --delay: ${d2018};`}
+									aria-hidden="true"
+								></div>
+							</div>
+							<span class="w-10 shrink-0 text-right text-xs font-semibold tabular-nums text-black/50">
+								{row.val2018}%
+							</span>
+						</div>
+					</li>
+				);
+			})}
+		</ul>
+
+		<!-- Scale axis -->
+		<div aria-hidden="true" class="ml-11 mt-4 flex justify-between border-t border-black/8 pr-[3.25rem] pt-2">
+			{[0, 2.5, 5.0, 7.5, 10.0].map(v => (
+				<span class="text-[9px] tabular-nums text-black/25">{v}%</span>
+			))}
+		</div>
+	</div>
+
+	<!-- ── Source footnote ───────────────────────────────── -->
+	<div class="border-t border-black/8 px-6 py-3 md:px-8">
+		<p class="text-[0.65rem] leading-relaxed text-black/30">
+			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 &amp; 2018 (Table 1).
+			† Difference from 2012 is statistically significant at the 5% significance level.
+			* 2012 figures may not sum to subtotals due to rounding.
+		</p>
+	</div>
+</figure>
+
+<style>
+	/* ── Bar animation ── */
+	.bar {
+		width: 0;
+		transition: width 950ms cubic-bezier(0.25, 1, 0.5, 1);
+		transition-delay: var(--delay, 0ms);
+	}
+
+	.vic-chart.in-view .bar {
+		width: var(--w);
+	}
+
+	/* ── Row slide-in animation ── */
+	.bar-row {
+		opacity: 0;
+		transform: translateX(-14px);
+		transition:
+			opacity  500ms ease,
+			transform 500ms ease;
+		transition-delay: calc(var(--i, 0) * 90ms);
+	}
+
+	.vic-chart.in-view .bar-row {
+		opacity: 1;
+		transform: translateX(0);
+	}
+</style>
+
+<script>
+	(() => {
+		const chart = document.getElementById('vic-chart');
+		if (!chart) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					chart.classList.add('in-view');
+					observer.disconnect();
+				}
+			},
+			{ threshold: 0.15 },
+		);
+
+		observer.observe(chart);
+	})();
+</script>
