@@ -310,11 +310,13 @@ const heroFrames: HeroFrame[] = [
 
 			replayButton.hidden = true;
 			subtextEl.classList.add('is-hidden');
+			setFrame(0);
+			await sleep(introDelayMs);
 
-			for (let step = 0; step < phrases.length; step++) {
+			for (let step = 1; step < phrases.length; step++) {
 				setFrame(step);
 				await setTitle(phrases[step]);
-				await sleep(step === 0 ? introDelayMs : phraseDelayMs);
+				await sleep(phraseDelayMs);
 			}
 
 			setRestingHero();
