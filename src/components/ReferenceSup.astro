@@ -11,9 +11,9 @@ const { number, href, label, popoverEnabled = true } = Astro.props;
 
 <span class="reference-sup ml-0.5 inline-block align-super text-[0.65em] leading-none">
 	<a
-		href="#references"
+		href={`#reference-${number}`}
 		class="font-semibold text-[#780000] transition-colors hover:text-[#c1121f]"
-		aria-label={`Reference ${number}: scroll to references`}
+		aria-label={`Reference ${number}: scroll to reference ${number}`}
 	>
 		{number}
 	</a>

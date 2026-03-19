@@ -222,7 +222,9 @@ import '../styles/global.css'
 				const chapterObserver = new IntersectionObserver(
 					(entries) => {
 						entries.forEach((entry) => {
-							entry.target.classList.toggle('in-view', entry.isIntersecting);
+							if (!entry.isIntersecting) return;
+							entry.target.classList.add('in-view');
+							chapterObserver.unobserve(entry.target);
 						});
 					},
 					{
@@ -288,10 +290,21 @@ import '../styles/global.css'
 				});
 			};
 
+			const setupReferenceAnchors = () => {
+				const referenceItems = document.querySelectorAll<HTMLLIElement>('#references ol > li');
+				referenceItems.forEach((item, index) => {
+					if (!item.id) {
+						item.id = `reference-${index + 1}`;
+					}
+					item.style.scrollMarginTop = '7rem';
+				});
+			};
+
 			window.addEventListener('scroll', () => { updateChapterLabel(); updateHeaderVisibility(); }, { passive: true });
 			window.addEventListener('load', () => { updateChapterLabel(); updateHeaderVisibility(); });
 			updateChapterLabel();
 			updateHeaderVisibility();
+			setupReferenceAnchors();
 			setupReferenceCopy();
 		</script>
 
