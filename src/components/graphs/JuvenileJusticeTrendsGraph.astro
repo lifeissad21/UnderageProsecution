@@ -45,7 +45,7 @@ const data: Row[] = [
 	{ year: 2023, delinquency: null, juvenileArrests: 75.4134086, detainedYouth: 80.52 },
 ];
 
-const WIDTH = 760;
+const WIDTH = 920;
 const HEIGHT = 360;
 const PADDING = { top: 24, right: 28, bottom: 42, left: 54 };
 const INNER_WIDTH = WIDTH - PADDING.left - PADDING.right;
@@ -88,25 +88,25 @@ const metrics: Metric[] = [
 		key: 'juvenileArrests',
 		label: 'Juvenile arrests',
 		color: '#b91c1c',
-		reference: 5,
+		reference: 19,
 		href: 'https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/',
-		popoverLabel: 'Council on Criminal Justice: Who Gets Arrested in America',
+		popoverLabel: 'Data source: Council on Criminal Justice (Who Gets Arrested in America)',
 	},
 	{
 		key: 'delinquency',
 		label: 'Delinquency cases',
 		color: '#0f766e',
-		reference: 6,
-		href: 'https://ojjdp.ojp.gov/model-programs-guide/literature-reviews/juvenile-court-system',
-		popoverLabel: 'Juvenile Court Statistics Program delinquency cases',
+		reference: 20,
+		href: 'https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/',
+		popoverLabel: 'Data source: Council on Criminal Justice (Who Gets Arrested in America)',
 	},
 	{
 		key: 'detainedYouth',
 		label: 'Detained youth (recently admitted)',
 		color: '#1d4ed8',
-		reference: 7,
-		href: 'https://www.ojjdp.gov/ojstatbb/cjrp/',
-		popoverLabel: 'Census of Juveniles in Residential Placement detained status count',
+		reference: 21,
+		href: 'https://ojjdp.ojp.gov/statistical-briefing-book/data-analysis-tools/ezajcs',
+		popoverLabel: 'Data source: OJJDP Statistical Briefing Book Data Analysis Tools (EZAJCS)',
 	},
 ];
 
@@ -119,9 +119,15 @@ function segmentsFor(key: MetricKey): string[] {
 
 	return [`M ${points.map((pt) => `${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`).join(' L ')}`];
 }
+
+function pointsFor(key: MetricKey): { x: number; y: number }[] {
+	return data
+		.filter((row) => row[key] !== null)
+		.map((row) => ({ x: x(row.year), y: y(row[key] as number) }));
+}
 ---
 
-<figure id="juvenile-trends-chart" class="jj-trends-chart my-10 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
+<figure id="juvenile-trends-chart" class="jj-trends-chart relative left-1/2 my-10 w-[min(100vw-2rem,68rem)] max-w-none -translate-x-1/2 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
 	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
 		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
 			National Juvenile Justice Indicators
@@ -130,13 +136,13 @@ function segmentsFor(key: MetricKey): string[] {
 			Change in Youth Crime Indicators, 1990-2023
 		</h4>
 		<p class="mt-1 text-[0.82rem] leading-relaxed text-black/50">
-			Three national indicators are shown as indexed trend lines over time. Method and framing are based on the Annie E. Casey Foundation chart
-			<ReferenceSup number={9} href="https://www.aecf.org/blog/what-juvenile-justice-data-reveal-and-what-the-numbers-cant-tell-us" label="Annie E. Casey Foundation: What juvenile justice data reveal and what the numbers can’t tell us" popoverEnabled={false} />.
+			Three national indicators are shown as indexed trend lines over time. Graph structure is based on the Annie E. Casey Foundation reference chart
+			<ReferenceSup number={22} href="https://www.aecf.org/blog/what-juvenile-justice-data-reveal-and-what-the-numbers-cant-tell-us" label="Graph based on Annie E. Casey Foundation chart" popoverEnabled={false} />.
 		</p>
 
-		<div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[0.76rem] text-black/70 sm:gap-x-5">
+		<div class="mt-4 flex flex-nowrap items-center gap-x-4 overflow-x-auto text-[0.76rem] text-black/70 sm:gap-x-5">
 			{metrics.map((metric) => (
-				<span class="inline-flex items-center gap-2">
+				<span class="inline-flex items-center gap-2 whitespace-nowrap">
 					<span class="h-2.5 w-5 rounded-full" style={`background:${metric.color};`}></span>
 					<span>
 						{metric.label}
@@ -168,11 +174,18 @@ function segmentsFor(key: MetricKey): string[] {
 					{segmentsFor(metric.key).map((segment, idx) => (
 						<path
 							d={segment}
-							class="trend-line"
+							class={`trend-line ${metric.key === 'detainedYouth' ? 'trend-line-dashed' : ''}`}
 							style={`--line-color: ${metric.color}; --line-delay: ${(idx + 1) * 140}ms;`}
 							pathLength="1"
 						/>
 					))}
+					{metric.key === 'detainedYouth' &&
+						pointsFor(metric.key).map((pt) => (
+							<g>
+								<circle cx={pt.x} cy={pt.y} r="4.5" class="detained-point-outer" style={`--point-color: ${metric.color};`} />
+								<circle cx={pt.x} cy={pt.y} r="2" class="detained-point-inner" />
+							</g>
+						))}
 				</g>
 			))}
 		</svg>
@@ -180,10 +193,7 @@ function segmentsFor(key: MetricKey): string[] {
 
 	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
 		<p class="text-[0.68rem] leading-relaxed text-black/35">
-			Juvenile arrests<ReferenceSup number={5} href="https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/" label="Council on Criminal Justice report" popoverEnabled={false} />;
-			delinquency cases<ReferenceSup number={6} href="https://ojjdp.ojp.gov/model-programs-guide/literature-reviews/juvenile-court-system" label="Juvenile Court Statistics Program" popoverEnabled={false} />;
-			detained youth (recently admitted)<ReferenceSup number={7} href="https://www.ojjdp.gov/ojstatbb/cjrp/" label="Census of Juveniles in Residential Placement" popoverEnabled={false} />.
-			Contextual admissions trend: Monthly Youth Detention Survey<ReferenceSup number={8} href="https://www.aecf.org/work/juvenile-justice/monthly-youth-detention-survey" label="Monthly Youth Detention Survey" popoverEnabled={false} />.
+			Data compiled from: Council on Criminal Justice<ReferenceSup number={19} href="https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/" label="Data compiled from Council on Criminal Justice (source 1)" popoverEnabled={false} />, Council on Criminal Justice<ReferenceSup number={20} href="https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/" label="Data compiled from Council on Criminal Justice (source 2)" popoverEnabled={false} />, and OJJDP EZAJCS<ReferenceSup number={21} href="https://ojjdp.ojp.gov/statistical-briefing-book/data-analysis-tools/ezajcs" label="Data compiled from OJJDP EZAJCS" popoverEnabled={false} />. Graph based on Annie E. Casey Foundation chart<ReferenceSup number={22} href="https://www.aecf.org/blog/what-juvenile-justice-data-reveal-and-what-the-numbers-cant-tell-us" label="Graph based on Annie E. Casey Foundation chart" popoverEnabled={false} />.
 		</p>
 	</div>
 </figure>
@@ -221,6 +231,19 @@ function segmentsFor(key: MetricKey): string[] {
 		opacity: 0.95;
 		transition: stroke-dashoffset 1200ms cubic-bezier(0.25, 1, 0.5, 1);
 		transition-delay: var(--line-delay, 0ms);
+	}
+
+	.trend-line-dashed {
+		stroke-dasharray: 6 4;
+		stroke-dashoffset: 10;
+	}
+
+	.detained-point-outer {
+		fill: var(--point-color);
+	}
+
+	.detained-point-inner {
+		fill: white;
 	}
 
 	.jj-trends-chart.in-view .trend-line {
