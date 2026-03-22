@@ -1,8 +1,8 @@
 ---
-import { Image } from 'astro:assets';
 import ChapterDivider from '../ChapterDivider.astro';
 import ReferenceSup from '../ReferenceSup.astro';
 import VictimizationChart from '../graphs/VictimizationChart.astro';
+import DetentionCostMap from '../graphs/DetentionCostMap.astro';
 ---
 
 <ChapterDivider
@@ -13,88 +13,94 @@ import VictimizationChart from '../graphs/VictimizationChart.astro';
 
 <section id="issues" class="mx-auto max-w-2xl px-5 py-16 sm:px-6 sm:py-20 md:py-24">
 	<article class="space-y-8 text-[1rem] leading-[1.75] text-black sm:space-y-10 sm:text-[1.125rem] sm:leading-[1.85]">
-
 		<p>
-			<!-- TODO (Brian): Write the current issues section. Identify and analyze the systemic
-			     problems that arise from current underage prosecution practices — including elevated
-			     recidivism, racial and socioeconomic disparities, mental health deterioration,
-			     and disrupted education. -->
-			Placeholder: Open the chapter by establishing the core issues that current prosecution
-			practices generate for young people and communities.
-		</p>
-
-		<!-- Pull quote -->
-		<div class="py-4">
-			<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
-			<p class="text-[1.35rem] font-bold leading-snug text-black">
-				<!-- TODO (Brian): Update pull quote -->
-				"Placeholder pull quote for current issues chapter."
-			</p>
-		</div>
-
-		<p>
-			<!-- TODO (Brian): Continue the analysis of current issues. Explore how prosecution
-			     practices create or perpetuate social, legal, and developmental harms. -->
-			Placeholder: Continue exploring the downstream consequences of prosecuting minors
-			in adult court or under punitive juvenile conditions.
+			The number of youth detentions has fallen drastically since its peak in the late
+			1990s, with the one-day count of youth in residential placements dropping from
+			107,493 in 1999 to 29,314 in 2023 <ReferenceSup refId={37} />. However, the
+			remaining detained population still represents a large volume of confinement.
+			The Sentencing Project reports that among youth counted in placement,
+			45% were in detention while awaiting adjudication and 53% were committed
+			to secure facilities <ReferenceSup refId={38} />.
 		</p>
 
 		<p>
-			
-			<!-- TODO (Brian): Add additional paragraphs as needed. -->
-			Placeholder: Further analysis and examples.
+			A one-day census also understates the scale of confinement over time. The
+			Sentencing Project estimates that roughly 150,000 youth were detained in 2022,
+			even before counting additional youth held on criminal charges, probation
+			violations, or status offenses <ReferenceSup refId={38} />. As common as youth
+			detention remains, evidence suggests confinement is often less effective than
+			community-based alternatives.
 		</p>
 
-		<p>
-			The overall process is also represented in OJJDP's national pathway diagram
-			<ReferenceSup refId={28} />.
-		</p>
-
-		<figure class="overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
-			<Image
-				src="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif"
-				alt="Juvenile justice process flow diagram"
-				unoptimized
-				width={1200}
-				height={700}
-				loading="lazy"
-				class="h-auto w-full"
-			/>
-			<figcaption class="border-t border-black/8 px-4 py-3 text-sm italic text-black/60 sm:px-5">
-				Flow pathway of the juvenile justice process.
-			</figcaption>
-		</figure>
-
-		<!-- ─────────────────────────────────────────────── -->
-		<!-- Subchapter: Statistics                          -->
-		<!-- ─────────────────────────────────────────────── -->
-		<h3 id="issues-statistics" class="pt-8 text-2xl font-bold text-black">
-			Statistics
+		<h3 id="issues-environment" class="pt-6 text-2xl font-bold text-black">
+			Detention centers are poor environments
 		</h3>
 
 		<p>
-			<!-- TODO (Brian): Provide key statistics that quantify and support the issues identified
-			     above. Cite sources using <ReferenceSup> as needed. -->
-			Placeholder: Present data-driven evidence of the negative outcomes associated with
-			prosecuting minors in adult court.
+			Investigations in Kentucky documented more than 100 incidents between 2018 and
+			2021 in which staff in juvenile facilities used excessive force, including episodes
+			that led to hospitalization. Reporting also described sexual misconduct by staff,
+			racial slurs, threats of violence, failure to stop sexual assault between detained
+			youth, and repeated loss of control requiring police intervention
+			<ReferenceSup refId={39} />.
 		</p>
 
-		<!-- Statistics block -->
-		<div class="rounded-md border border-black/10 bg-white p-6">
-			<p class="text-sm font-semibold uppercase tracking-wide text-black/40">Key Statistics</p>
-			<ul class="mt-4 space-y-3 text-base text-black">
-				<li><!-- TODO (Brian): Statistic 1 --> Placeholder statistic</li>
-				<li><!-- TODO (Brian): Statistic 2 --> Placeholder statistic</li>
-				<li><!-- TODO (Brian): Statistic 3 --> Placeholder statistic</li>
-				<li><!-- TODO (Brian): Statistic 4 --> Placeholder statistic</li>
-			</ul>
-		</div>
-		
-		<VictimizationChart />
 		<p>
-			<!-- TODO (Brian): Draw conclusions from the statistics and connect them to the
-			     broader argument for reform. -->
-			Placeholder: Synthesize what the data reveals about the urgency of reform.
+			Sexual abuse is not limited to one state. The Bureau of Justice Statistics reported
+			that an estimated 7.1% of youth in juvenile facilities experienced sexual
+			victimization in 2018, with some jurisdictions reporting rates as high as 21.5%
+			<ReferenceSup refId={30} />.
+		</p>
+
+		<VictimizationChart />
+
+		<p>
+			Experiencing abuse has major long-term consequences. A Southern California study
+			reported that 77.4% of detained youth experienced one or more forms of physical,
+			psychological, or sexual abuse, and that a higher number of abuse incidents was
+			associated with more social and emotional problems after release. More than one
+			third of surveyed youth reported mild to significant depression symptoms, and
+			14.5% showed clinically significant posttraumatic stress reactions
+			<ReferenceSup refId={45} />. These outcomes raise serious ethical concerns,
+			especially because only 8.5% of youth arrests involve FBI Part I violent crimes
+			<ReferenceSup refId={38} />, while public-order and technical violations remain
+			a substantial share of youth detention drivers <ReferenceSup refId={44} />.
+		</p>
+
+		<h3 id="issues-effectiveness" class="pt-6 text-2xl font-bold text-black">
+			Detention is ineffective and costly
+		</h3>
+
+		<p>
+			A 2011 Annie E. Casey Foundation report found that 70% to 80% of youth leaving
+			residential placement were rearrested within two to three years, and 45% to 72%
+			were later adjudicated delinquent in juvenile court or convicted in criminal court
+			<ReferenceSup refId={40} />. A later Sentencing Project review found that
+			recidivism rates across 10 states had not meaningfully improved
+			over that period <ReferenceSup refId={14} />.
+		</p>
+
+		<p>
+			This raises a core policy question: if 63% of youth referred to juvenile court are
+			never referred again <ReferenceSup refId={41} />, why rely so heavily on the
+			most restrictive response? Comparative studies indicate that detention frequently
+			performs worse than probation and diversion, or produces no measurable benefit,
+			when compared with community alternatives <ReferenceSup refId={14} />.
+		</p>
+
+		<p>
+			The financial burden is also substantial. Justice Policy Institute data estimated
+			that the annual cost to confine one youth in secure detention exceeded $214,620
+			in 2020, with some states averaging more than $500,000 per youth per year
+			<ReferenceSup refId={43} />.
+		</p>
+
+		<DetentionCostMap />
+
+		<p>
+			Diversion and community programs are consistently shown to be more effective,
+			less harmful, and less expensive than confinement-focused approaches
+			<ReferenceSup refId={14} /><ReferenceSup refId={42} /><ReferenceSup refId={43} />.
 		</p>
 
 	</article>

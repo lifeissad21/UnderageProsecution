@@ -1,0 +1,157 @@
+---
+import ReferenceSup from '../ReferenceSup.astro';
+
+const vizId = 'viz1774216012130';
+---
+
+<figure
+	id="detention-cost-map"
+	class="detention-cost-map relative left-1/2 my-2 -translate-x-1/2 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm"
+	aria-label="Tableau map of annual youth detention costs by U.S. state"
+	role="figure"
+>
+	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
+		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
+			Justice Policy Institute - Sticker Shock 2020
+		</p>
+		<h4 class="mt-1 text-[1.05rem] font-bold leading-tight text-black">
+			Annual Cost of Youth Detention by State
+		</h4>
+		<p class="mt-0.5 text-[0.82rem] text-black/45">
+			Interactive Tableau dashboard
+		</p>
+	</div>
+
+	<div class="px-3 pb-2 pt-3 sm:px-4 sm:pb-3 sm:pt-4 md:px-6">
+		<div class="tableau-shell">
+			<div class="tableauPlaceholder" id={vizId} style="position: relative;">
+				<noscript>
+					<a href="#">
+						<img
+							alt="Dashboard 1"
+							src="https://public.tableau.com/static/images/Ma/Map_Viz/Dashboard1/1_rss.png"
+							style="border: none"
+						/>
+					</a>
+				</noscript>
+				<object class="tableauViz" style="display:none;">
+					<param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+					<param name="embed_code_version" value="3" />
+					<param name="site_root" value="" />
+					<param name="name" value="Map_Viz/Dashboard1" />
+					<param name="tabs" value="no" />
+					<param name="toolbar" value="yes" />
+					<param name="static_image" value="https://public.tableau.com/static/images/Ma/Map_Viz/Dashboard1/1.png" />
+					<param name="animate_transition" value="yes" />
+					<param name="display_static_image" value="yes" />
+					<param name="display_spinner" value="yes" />
+					<param name="display_overlay" value="yes" />
+					<param name="display_count" value="yes" />
+					<param name="language" value="en-US" />
+				</object>
+			</div>
+		</div>
+	</div>
+
+	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
+		<p class="text-[0.65rem] leading-relaxed text-black/30">
+			Source: Sticker Shock 2020: The Cost of Youth Incarceration <ReferenceSup refId={43} />.
+			Publication date: July 30, 2020. Category: Youth Justice, Community Reinvestment.
+			In 2014, when the Justice Policy Institute first analyzed the cost of secure youth confinement,
+			33 states and the District of Columbia reported an annual cost per youth above $100,000.
+			In 2020, despite falling youth arrests and incarceration rates, 40 states and Washington, D.C.
+			reported spending at least $100,000 annually per confined child, with some states spending
+			more than $500,000 per youth per year.
+		</p>
+	</div>
+</figure>
+
+<style>
+	.detention-cost-map {
+		width: min(1000px, calc(100vw - 2rem));
+		opacity: 0;
+		transform: translateY(14px);
+		transition: opacity 520ms ease, transform 520ms ease;
+	}
+
+	.detention-cost-map.in-view {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.tableau-shell {
+		min-height: 700px;
+		border-radius: 0.5rem;
+		overflow: hidden;
+		background:
+			radial-gradient(circle at 20% 20%, rgba(30, 58, 138, 0.04), transparent 55%),
+			radial-gradient(circle at 85% 25%, rgba(15, 118, 110, 0.06), transparent 45%),
+			linear-gradient(180deg, rgba(2, 6, 23, 0.025), rgba(2, 6, 23, 0.015));
+	}
+
+	.tableauPlaceholder,
+	.tableauPlaceholder object,
+	.tableauPlaceholder iframe {
+		width: 100% !important;
+	}
+
+	@media (max-width: 767px) {
+		.detention-cost-map {
+			width: calc(100vw - 1rem);
+		}
+
+		.tableau-shell {
+			min-height: 560px;
+		}
+	}
+</style>
+
+<script>
+	(() => {
+		const root = document.getElementById('detention-cost-map');
+		if (!root) return;
+		const vizContainer = document.getElementById('viz1774216012130');
+		if (!vizContainer || vizContainer.dataset.loaded === 'true') return;
+
+		const vizElement = vizContainer.getElementsByTagName('object')[0];
+		if (!vizElement) return;
+
+		const setSize = () => {
+			const width = vizContainer.offsetWidth;
+			const desktopLikeHeight = Math.round(width * 0.82);
+			const mobileLikeHeight = Math.round(width * 1.08);
+			const nextHeight = width < 640 ? mobileLikeHeight : desktopLikeHeight;
+			const clampedHeight = Math.max(520, Math.min(nextHeight, 920));
+
+			vizElement.style.width = '100%';
+			vizElement.style.height = `${clampedHeight}px`;
+		};
+
+		const loadTableau = () => {
+			if (vizContainer.dataset.loaded === 'true') return;
+			setSize();
+			const scriptElement = document.createElement('script');
+			scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+			vizElement.parentNode?.insertBefore(scriptElement, vizElement);
+			vizContainer.dataset.loaded = 'true';
+		};
+
+		if ('IntersectionObserver' in window) {
+			const observer = new IntersectionObserver(
+				([entry]) => {
+					if (!entry.isIntersecting) return;
+					root.classList.add('in-view');
+					loadTableau();
+					observer.disconnect();
+				},
+				{ threshold: 0.16 },
+			);
+			observer.observe(root);
+		} else {
+			root.classList.add('in-view');
+			loadTableau();
+		}
+
+		window.addEventListener('resize', setSize, { passive: true });
+	})();
+</script>

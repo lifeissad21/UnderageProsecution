@@ -87,20 +87,28 @@ const inTextCitation = getInTextCitation(refId);
 </style>
 
 <script>
-	if (!window.__referencePopoverInit) {
-		window.__referencePopoverInit = true;
+	type ShortcutContext = {
+		url: string;
+		status: HTMLElement | null;
+		statusTimer?: ReturnType<typeof setTimeout>;
+	};
+
+	const win = window as Window & { __referencePopoverInit?: boolean };
+
+	if (!win.__referencePopoverInit) {
+		win.__referencePopoverInit = true;
 		const desktopQuery = window.matchMedia('(max-width: 1023px)');
 		const viewportPadding = 12;
 		const pointerGap = 14;
 		const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
 		const modifierLabel = isApplePlatform ? '⌘' : 'Ctrl';
-		let activeShortcutContext = null;
+		let activeShortcutContext: ShortcutContext | null = null;
 
-		document.querySelectorAll('[data-modifier-label]').forEach((node) => {
+		document.querySelectorAll<HTMLElement>('[data-modifier-label]').forEach((node) => {
 			node.textContent = modifierLabel;
 		});
 
-		const flashStatus = (context, message) => {
+		const flashStatus = (context: ShortcutContext | null, message: string): void => {
 			if (!context?.status) {
 				return;
 			}
@@ -114,7 +122,7 @@ const inTextCitation = getInTextCitation(refId);
 			}, 1100);
 		};
 
-		const copyToClipboard = async (text) => {
+		const copyToClipboard = async (text: string): Promise<boolean> => {
 			try {
 				await navigator.clipboard.writeText(text);
 				return true;
@@ -156,7 +164,7 @@ const inTextCitation = getInTextCitation(refId);
 			}
 		});
 
-		const positionPopover = (popover, event) => {
+		const positionPopover = (popover: HTMLElement, event: MouseEvent): void => {
 			if (desktopQuery.matches) {
 				return;
 			}
@@ -177,19 +185,19 @@ const inTextCitation = getInTextCitation(refId);
 			popover.style.setProperty('--popover-y', `${Math.round(y)}px`);
 		};
 
-		document.querySelectorAll('[data-reference-sup]').forEach((sup) => {
-			const popover = sup.querySelector('[data-reference-popover]');
-			const shortcuts = popover?.querySelector('[data-shortcut-instructions]');
-			const status = popover?.querySelector('[data-shortcut-status]');
+		document.querySelectorAll<HTMLElement>('[data-reference-sup]').forEach((sup) => {
+			const popover = sup.querySelector<HTMLElement>('[data-reference-popover]');
+			const shortcuts = popover?.querySelector<HTMLElement>('[data-shortcut-instructions]');
+			const status = popover?.querySelector<HTMLElement>('[data-shortcut-status]') ?? null;
 			if (!popover) {
 				return;
 			}
 
 			let overSup = false;
 			let overPopover = false;
-			let hideTimer;
+			let hideTimer: ReturnType<typeof setTimeout> | undefined;
 
-			const showPopover = (event) => {
+			const showPopover = (event?: MouseEvent) => {
 				clearTimeout(hideTimer);
 				popover.dataset.active = 'true';
 				activeShortcutContext = {
@@ -214,12 +222,12 @@ const inTextCitation = getInTextCitation(refId);
 				}, 110);
 			};
 
-			sup.addEventListener('mouseenter', (event) => {
+			sup.addEventListener('mouseenter', (event: MouseEvent) => {
 				overSup = true;
 				showPopover(event);
 			});
 
-			sup.addEventListener('mousemove', (event) => {
+			sup.addEventListener('mousemove', (event: MouseEvent) => {
 				showPopover(event);
 			});
 

@@ -109,6 +109,7 @@ const renderedLinks = links.map((link) => {
 	role="figure"
 	aria-label="Juvenile court processing for a typical 1,000 delinquency cases, with hoverable pathways"
 >
+	<div class="sankey-entry-shell">
 	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
 		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
 			Juvenile court processing for a typical 1,000 delinquency cases, 2021
@@ -186,6 +187,7 @@ const renderedLinks = links.map((link) => {
 			December 22, 2023. Data Source: National Juvenile Court Data Archive. National Center for Juvenile Justice. Pittsburgh, PA.
 		</p>
 	</div>
+	</div>
 </figure>
 
 <style>
@@ -195,6 +197,10 @@ const renderedLinks = links.map((link) => {
 		min-width: 840px;
 		max-height: 560px;
 		width: 100%;
+	}
+
+	.sankey-entry-shell {
+		will-change: transform, opacity;
 	}
 
 	.axis-label {
@@ -263,6 +269,12 @@ const renderedLinks = links.map((link) => {
 		display: none;
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		.sankey-entry-shell {
+			will-change: auto;
+		}
+	}
+
 	@media (max-width: 1024px) {
 		.axis-label {
 			font-size: 17px;
@@ -282,11 +294,54 @@ const renderedLinks = links.map((link) => {
 	(() => {
 		const root = document.getElementById('current-prosecution-flow') as HTMLElement | null;
 		if (!root) return;
+		const entryShell = root.querySelector('.sankey-entry-shell') as HTMLElement | null;
+		if (!entryShell) return;
+
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 		const canvas = root.querySelector('.sankey-canvas') as HTMLElement | null;
 		const tooltip = root.querySelector('.sankey-tooltip') as HTMLElement | null;
 		const targets = root.querySelectorAll('[data-hover="true"]');
 		if (!canvas || !tooltip || targets.length === 0) return;
+
+		const playEntrance = () => {
+			if (root.dataset.entered === 'true') return;
+			root.dataset.entered = 'true';
+			if (reducedMotion) return;
+
+			entryShell.animate(
+				[
+					{ opacity: 0, transform: 'translateY(12px) scale(0.975)' },
+					{ opacity: 1, transform: 'translateY(0) scale(1)' },
+				],
+				{
+					duration: 720,
+					easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
+					fill: 'forwards',
+				},
+			);
+		};
+
+		if (!reducedMotion) {
+			entryShell.style.opacity = '0';
+			entryShell.style.transform = 'translateY(12px) scale(0.975)';
+		}
+
+		if ('IntersectionObserver' in window) {
+			const observer = new IntersectionObserver(
+				(entries, obs) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) return;
+						playEntrance();
+						obs.unobserve(entry.target);
+					});
+				},
+				{ threshold: 0.24, rootMargin: '0px 0px -8% 0px' },
+			);
+			observer.observe(root);
+		} else {
+			playEntrance();
+		}
 
 		const showTooltip = (text: string, x: number, y: number) => {
 			tooltip.textContent = text;
