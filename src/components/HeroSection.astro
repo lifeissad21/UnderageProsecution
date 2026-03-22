@@ -368,8 +368,19 @@ const heroFrames: HeroFrame[] = [
 		const introDelayMs = 2100;
 		const phraseDelayMs = 2600;
 		let isPlaying = false;
+		let isPaused = false;
+		let animationAborted = false;
+		let timeoutIds: number[] = [];
 
-		const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+		const sleep = (ms: number) => new Promise<void>((resolve) => {
+			const id = setTimeout(resolve, ms);
+			timeoutIds.push(id);
+		});
+
+		const clearAllTimeouts = () => {
+			timeoutIds.forEach(id => clearTimeout(id));
+			timeoutIds = [];
+		};
 
 		const setFrame = (index: number) => {
 			frames.forEach((frame, frameIndex) => {
@@ -390,26 +401,28 @@ const heroFrames: HeroFrame[] = [
 			setFrame(0);
 		};
 
-		const scrollPastHero = () => {
-			const intro = document.getElementById('intro');
-			if (intro) {
-				intro.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				return;
-			}
-
-			window.scrollTo({ top: root.offsetHeight, behavior: 'smooth' });
-		};
-
-		const playSequence = async ({ autoScroll }: { autoScroll: boolean }) => {
+		const playSequence = async () => {
 			if (isPlaying) return;
 			isPlaying = true;
+			animationAborted = false;
+			isPaused = false;
 
 			replayButton.hidden = true;
 			subtextEl.classList.add('is-hidden');
 			setFrame(0);
 			await sleep(introDelayMs);
 
+			if (animationAborted) {
+				isPlaying = false;
+				return;
+			}
+
 			for (let step = 1; step < phrases.length; step++) {
+				if (animationAborted) {
+					isPlaying = false;
+					return;
+				}
+
 				setFrame(step);
 				await setTitle(phrases[step]);
 				await sleep(phraseDelayMs);
@@ -418,16 +431,28 @@ const heroFrames: HeroFrame[] = [
 			setRestingHero();
 			replayButton.hidden = false;
 			isPlaying = false;
-
-			if (autoScroll) {
-				scrollPastHero();
-			}
 		};
 
-		playSequence({ autoScroll: true });
+		// Intersection Observer to pause animation when out of view
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (!entry.isIntersecting && isPlaying) {
+					// Scrolled out of view - abort animation
+					animationAborted = true;
+					clearAllTimeouts();
+					isPlaying = false;
+					replayButton.hidden = false;
+					setRestingHero();
+				}
+			});
+		}, { threshold: 0.1 });
+
+		observer.observe(root);
+
+		playSequence();
 
 		replayButton.addEventListener('click', () => {
-			playSequence({ autoScroll: false });
+			playSequence();
 		});
 	})();
 </script>

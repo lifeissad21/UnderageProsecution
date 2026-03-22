@@ -1,0 +1,392 @@
+---
+import ReferenceSup from '../ReferenceSup.astro';
+
+type Node = {
+	id: string;
+	x: number;
+	y: number;
+	w: number;
+	h: number;
+	fill: string;
+	label?: string;
+	tooltip: string;
+	kind: 'bar' | 'block';
+};
+
+type Link = {
+	id: string;
+	from: string;
+	to: string;
+	value: number;
+	fill: string;
+	tooltip: string;
+};
+
+const scale = 0.5;
+const baseY = 80;
+
+const h = (value: number): number => Number((value * scale).toFixed(2));
+
+const nodes: Node[] = [
+	{ id: 'total', x: 60, y: baseY, w: 30, h: h(1000), fill: '#8490d8', tooltip: 'Total: 1,000 cases', kind: 'bar' },
+	{ id: 'petitioned', x: 90, y: baseY, w: 300, h: h(558), fill: '#d7daef', label: 'Petitioned (558/56%)', tooltip: 'Petitioned: 558 cases (56%)', kind: 'block' },
+	{ id: 'nonpetitioned', x: 90, y: baseY + h(558), w: 300, h: h(442), fill: '#d7daef', label: 'Nonpetitioned (442/44%)', tooltip: 'Nonpetitioned: 442 cases (44%)', kind: 'block' },
+
+	{ id: 'waived', x: 420, y: 65, w: 30, h: h(6), fill: '#8eb8df', tooltip: 'Waived: 6 cases (1%)', kind: 'bar' },
+	{ id: 'adjudicated', x: 420, y: baseY, w: 300, h: h(270), fill: '#cde4da', label: 'Adjudicated (270/48%)', tooltip: 'Adjudicated: 270 of petitioned cases (48%)', kind: 'block' },
+	{ id: 'nonadjudicated', x: 420, y: baseY + h(270), w: 300, h: h(282), fill: '#cde4da', label: 'Nonadjudicated (282/50%)', tooltip: 'Nonadjudicated: 282 of petitioned cases (50%)', kind: 'block' },
+	{ id: 'np_probation', x: 420, y: baseY + h(558), w: 300, h: h(56), fill: '#d2e1f0', label: 'Probation (56/13%)', tooltip: 'Probation: 56 of nonpetitioned cases (13%)', kind: 'block' },
+	{ id: 'np_other', x: 420, y: baseY + h(558) + h(56), w: 300, h: h(186), fill: '#d2e1f0', label: 'Other sanction (186/42%)', tooltip: 'Other sanction: 186 of nonpetitioned cases (42%)', kind: 'block' },
+	{ id: 'np_dismissed', x: 420, y: baseY + h(558) + h(56) + h(186), w: 300, h: h(200), fill: '#d2e1f0', label: 'Dismissed (200/45%)', tooltip: 'Dismissed: 200 of nonpetitioned cases (45%)', kind: 'block' },
+
+	{ id: 'adj_placed', x: 1020, y: 190, w: 30, h: h(75), fill: '#8eb8df', tooltip: 'Placed: 75 of adjudicated cases (28%)', kind: 'bar' },
+	{ id: 'adj_probation', x: 1020, y: 252, w: 30, h: h(176), fill: '#8eb8df', tooltip: 'Probation: 176 of adjudicated cases (65%)', kind: 'bar' },
+	{ id: 'adj_other', x: 1020, y: 444, w: 30, h: h(19), fill: '#8eb8df', tooltip: 'Other sanction: 19 of adjudicated cases (7%)', kind: 'bar' },
+	{ id: 'nonadj_probation', x: 1020, y: 472, w: 30, h: h(95), fill: '#8eb8df', tooltip: 'Probation: 95 of nonadjudicated cases (34%)', kind: 'bar' },
+	{ id: 'nonadj_other', x: 1020, y: 583, w: 30, h: h(25), fill: '#8eb8df', tooltip: 'Other sanction: 25 of nonadjudicated cases (9%)', kind: 'bar' },
+	{ id: 'nonadj_dismissed', x: 1020, y: 624, w: 30, h: h(163), fill: '#8eb8df', tooltip: 'Dismissed: 163 of nonadjudicated cases (58%)', kind: 'bar' },
+];
+
+const links: Link[] = [
+	{ id: 'l-total-p', from: 'total', to: 'petitioned', value: 558, fill: 'rgb(176 181 224 / 0.72)', tooltip: '1,000 cases -> Petitioned (558/56%)' },
+	{ id: 'l-total-np', from: 'total', to: 'nonpetitioned', value: 442, fill: 'rgb(176 181 224 / 0.72)', tooltip: '1,000 cases -> Nonpetitioned (442/44%)' },
+
+	{ id: 'l-p-waived', from: 'petitioned', to: 'waived', value: 6, fill: 'rgb(169 214 198 / 0.76)', tooltip: 'Petitioned (558) -> Waived (6/1%)' },
+	{ id: 'l-p-adj', from: 'petitioned', to: 'adjudicated', value: 270, fill: 'rgb(169 214 198 / 0.76)', tooltip: 'Petitioned (558) -> Adjudicated (270/48%)' },
+	{ id: 'l-p-nadj', from: 'petitioned', to: 'nonadjudicated', value: 282, fill: 'rgb(169 214 198 / 0.76)', tooltip: 'Petitioned (558) -> Nonadjudicated (282/50%)' },
+
+	{ id: 'l-np-prob', from: 'nonpetitioned', to: 'np_probation', value: 56, fill: 'rgb(177 201 226 / 0.76)', tooltip: 'Nonpetitioned (442) -> Probation (56/13%)' },
+	{ id: 'l-np-other', from: 'nonpetitioned', to: 'np_other', value: 186, fill: 'rgb(177 201 226 / 0.76)', tooltip: 'Nonpetitioned (442) -> Other sanction (186/42%)' },
+	{ id: 'l-np-dismissed', from: 'nonpetitioned', to: 'np_dismissed', value: 200, fill: 'rgb(177 201 226 / 0.76)', tooltip: 'Nonpetitioned (442) -> Dismissed (200/45%)' },
+
+	{ id: 'l-adj-placed', from: 'adjudicated', to: 'adj_placed', value: 75, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Adjudicated (270) -> Placed (75/28%)' },
+	{ id: 'l-adj-prob', from: 'adjudicated', to: 'adj_probation', value: 176, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Adjudicated (270) -> Probation (176/65%)' },
+	{ id: 'l-adj-other', from: 'adjudicated', to: 'adj_other', value: 19, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Adjudicated (270) -> Other sanction (19/7%)' },
+
+	{ id: 'l-nadj-prob', from: 'nonadjudicated', to: 'nonadj_probation', value: 95, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Nonadjudicated (282) -> Probation (95/34%)' },
+	{ id: 'l-nadj-other', from: 'nonadjudicated', to: 'nonadj_other', value: 25, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Nonadjudicated (282) -> Other sanction (25/9%)' },
+	{ id: 'l-nadj-dismissed', from: 'nonadjudicated', to: 'nonadj_dismissed', value: 163, fill: 'rgb(177 201 226 / 0.8)', tooltip: 'Nonadjudicated (282) -> Dismissed (163/58%)' },
+];
+
+const nodeById = new Map(nodes.map((n) => [n.id, n]));
+
+function bandPath(x1: number, y1Top: number, y1Bottom: number, x2: number, y2Top: number, y2Bottom: number): string {
+	const bend = (x2 - x1) * 0.45;
+	return [
+		`M ${x1} ${y1Top}`,
+		`C ${x1 + bend} ${y1Top}, ${x2 - bend} ${y2Top}, ${x2} ${y2Top}`,
+		`L ${x2} ${y2Bottom}`,
+		`C ${x2 - bend} ${y2Bottom}, ${x1 + bend} ${y1Bottom}, ${x1} ${y1Bottom}`,
+		'Z',
+	].join(' ');
+}
+
+const outCursor = new Map<string, number>();
+const renderedLinks = links.map((link) => {
+	const source = nodeById.get(link.from);
+	const target = nodeById.get(link.to);
+	if (!source || !target) throw new Error(`Missing node for link ${link.id}`);
+
+	const lh = h(link.value);
+	const sourceOffset = outCursor.get(link.from) ?? 0;
+	outCursor.set(link.from, sourceOffset + lh);
+
+	const y1Top = source.y + sourceOffset;
+	const y1Bottom = y1Top + lh;
+	const y2Top = target.y;
+	const y2Bottom = target.y + target.h;
+
+	return {
+		...link,
+		d: bandPath(source.x + source.w, y1Top, y1Bottom, target.x, y2Top, y2Bottom),
+	};
+});
+---
+
+<figure
+	id="current-prosecution-flow"
+	class="sankey-chart relative left-1/2 my-8 w-[min(100vw-1.25rem,66rem)] max-w-none -translate-x-1/2 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm"
+	role="figure"
+	aria-label="Juvenile court processing for a typical 1,000 delinquency cases, with hoverable pathways"
+>
+	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
+		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
+			Juvenile court processing for a typical 1,000 delinquency cases, 2021
+		</p>
+	</div>
+
+	<div class="sankey-canvas relative overflow-x-auto px-2 py-3 sm:px-3 sm:py-4 md:px-4">
+		<svg viewBox="0 0 1260 740" role="img" aria-hidden="true">
+			<g>
+				{renderedLinks.map((link) => (
+					<path
+						d={link.d}
+						fill={link.fill}
+						class="sankey-link hover-target"
+						data-hover="true"
+						data-role="link"
+						data-link-from={link.from}
+						data-link-to={link.to}
+						data-tooltip={link.tooltip}
+						tabindex="0"
+					></path>
+				))}
+			</g>
+
+			<g>
+				{nodes.map((node) => (
+					<g class="hover-target" data-hover="true" data-role="node" data-node-id={node.id} data-tooltip={node.tooltip} tabindex="0">
+						<rect
+							x={node.x}
+							y={node.y}
+							width={node.w}
+							height={node.h}
+							rx={node.kind === 'bar' ? 0 : 1.5}
+							fill={node.fill}
+							class={node.kind === 'bar' ? 'node-bar' : 'node-block'}
+						></rect>
+					</g>
+				))}
+			</g>
+
+			<text x="54" y="430" class="axis-label" text-anchor="end">
+				<tspan x="54" dy="0">1,000</tspan>
+				<tspan x="54" dy="24">cases</tspan>
+			</text>
+
+			<text x="570" y="58" class="label-small" text-anchor="middle">Waived (6/1%)</text>
+
+			<text x="240" y={baseY + h(558) / 2} class="node-label" text-anchor="middle">Petitioned (558/56%)</text>
+			<text x="240" y={baseY + h(558) + h(442) / 2} class="node-label" text-anchor="middle">Nonpetitioned (442/44%)</text>
+
+			<text x="570" y={baseY + h(270) / 2} class="node-label" text-anchor="middle">Adjudicated (270/48%)</text>
+			<text x="570" y={baseY + h(270) + h(282) / 2} class="node-label" text-anchor="middle">Nonadjudicated (282/50%)</text>
+
+			<text x="700" y={baseY + h(558) + h(56) / 2} class="node-label" text-anchor="end">Probation (56/13%)</text>
+			<text x="700" y={baseY + h(558) + h(56) + h(186) / 2} class="node-label" text-anchor="end">Other sanction (186/42%)</text>
+			<text x="700" y={baseY + h(558) + h(56) + h(186) + h(200) / 2} class="node-label" text-anchor="end">Dismissed (200/45%)</text>
+
+			<text x="1062" y={190 + h(75) / 2} class="node-label" text-anchor="start">Placed (75/28%)</text>
+			<text x="1062" y={252 + h(176) / 2} class="node-label" text-anchor="start">Probation (176/65%)</text>
+			<text x="1062" y={444 + h(19) / 2} class="node-label" text-anchor="start">Other sanction (19/7%)</text>
+			<text x="1062" y={472 + h(95) / 2} class="node-label" text-anchor="start">Probation (95/34%)</text>
+			<text x="1062" y={583 + h(25) / 2} class="node-label" text-anchor="start">Other sanction (25/9%)</text>
+			<text x="1062" y={624 + h(163) / 2} class="node-label" text-anchor="start">Dismissed (163/58%)</text>
+		</svg>
+
+		<div class="sankey-tooltip hidden" aria-live="polite"></div>
+	</div>
+
+	<div class="border-t border-black/8 bg-black/[0.015] px-4 py-3 sm:px-6 md:px-8">
+		<p class="text-[0.7rem] leading-relaxed text-black/50">
+			Note: Detail may not sum to total due to rounding. Percents are based on unrounded values.
+		</p>
+		<p class="mt-1 text-[0.7rem] leading-relaxed text-black/50">
+			Source: OJJDP Statistical Briefing Book.
+			<ReferenceSup number={23} href="https://www.ojjdp.gov/ojstatbb/court/JCSCF_Display.asp?ID=qa06601&year=2021&group=1&estimate=1" label="OJJDP Statistical Briefing Book — Court Statistics (2021)" popoverEnabled={false} />
+			December 22, 2023. Data Source: National Juvenile Court Data Archive. National Center for Juvenile Justice. Pittsburgh, PA.
+		</p>
+	</div>
+</figure>
+
+<style>
+	.sankey-chart svg {
+		font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+		height: auto;
+		min-width: 840px;
+		max-height: 560px;
+		width: 100%;
+	}
+
+	.axis-label {
+		fill: rgb(51 65 85 / 0.92);
+		font-size: 19px;
+		font-weight: 600;
+	}
+
+	.label-small {
+		fill: rgb(30 41 59 / 0.9);
+		font-size: 16px;
+		font-weight: 500;
+	}
+
+	.node-label {
+		alignment-baseline: middle;
+		fill: rgb(15 23 42 / 0.92);
+		font-size: 17px;
+		font-weight: 500;
+	}
+
+	.node-bar {
+		fill-opacity: 1;
+	}
+
+	.node-block {
+		fill-opacity: 0.9;
+	}
+
+	.sankey-link,
+	.hover-target {
+		cursor: pointer;
+		transition: opacity 180ms ease, filter 180ms ease;
+	}
+
+	.sankey-chart.has-active .hover-target,
+	.sankey-chart.has-active .sankey-link {
+		opacity: 0.22;
+	}
+
+	.sankey-chart .active-highlight {
+		opacity: 1 !important;
+		filter: brightness(1.03) saturate(1.04);
+	}
+
+	.sankey-tooltip {
+		background: rgb(255 255 255 / 0.98);
+		border: 1px solid rgb(148 163 184 / 0.5);
+		border-radius: 6px;
+		box-shadow: 0 8px 20px rgb(15 23 42 / 0.15);
+		color: rgb(15 23 42 / 0.92);
+		font-size: 0.8rem;
+		font-weight: 600;
+		left: 0;
+		max-width: 460px;
+		padding: 0.45rem 0.62rem;
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		transform: translate(-50%, -115%);
+		white-space: nowrap;
+		z-index: 20;
+	}
+
+	.sankey-tooltip.hidden {
+		display: none;
+	}
+
+	@media (max-width: 1024px) {
+		.axis-label {
+			font-size: 17px;
+		}
+
+		.label-small {
+			font-size: 14px;
+		}
+
+		.node-label {
+			font-size: 14px;
+		}
+	}
+</style>
+
+<script>
+	(() => {
+		const root = document.getElementById('current-prosecution-flow') as HTMLElement | null;
+		if (!root) return;
+
+		const canvas = root.querySelector('.sankey-canvas') as HTMLElement | null;
+		const tooltip = root.querySelector('.sankey-tooltip') as HTMLElement | null;
+		const targets = root.querySelectorAll('[data-hover="true"]');
+		if (!canvas || !tooltip || targets.length === 0) return;
+
+		const showTooltip = (text: string, x: number, y: number) => {
+			tooltip.textContent = text;
+			tooltip.classList.remove('hidden');
+			tooltip.style.left = `${x}px`;
+			tooltip.style.top = `${y}px`;
+		};
+
+		const hideTooltip = () => {
+			tooltip.classList.add('hidden');
+		};
+
+		const clearHighlight = () => {
+			root.classList.remove('has-active');
+			targets.forEach((el) => el.classList.remove('active-highlight'));
+		};
+
+		const setHighlight = (el: Element) => {
+			const role = el.getAttribute('data-role');
+			const nodeId = el.getAttribute('data-node-id');
+			const linkFrom = el.getAttribute('data-link-from');
+			const linkTo = el.getAttribute('data-link-to');
+
+			root.classList.add('has-active');
+			targets.forEach((item) => item.classList.remove('active-highlight'));
+
+			if (role === 'link' && linkFrom && linkTo) {
+				targets.forEach((item) => {
+					const itemRole = item.getAttribute('data-role');
+					const itemNodeId = item.getAttribute('data-node-id');
+					const itemFrom = item.getAttribute('data-link-from');
+					const itemTo = item.getAttribute('data-link-to');
+					if (
+						(itemRole === 'link' && itemFrom === linkFrom && itemTo === linkTo)
+						|| (itemRole === 'node' && (itemNodeId === linkFrom || itemNodeId === linkTo))
+					) {
+						item.classList.add('active-highlight');
+					}
+				});
+				return;
+			}
+
+			if (role === 'node' && nodeId) {
+				targets.forEach((item) => {
+					const itemRole = item.getAttribute('data-role');
+					const itemNodeId = item.getAttribute('data-node-id');
+					const itemFrom = item.getAttribute('data-link-from');
+					const itemTo = item.getAttribute('data-link-to');
+					if (
+						(itemRole === 'node' && itemNodeId === nodeId)
+						|| (itemRole === 'link' && (itemFrom === nodeId || itemTo === nodeId))
+					) {
+						item.classList.add('active-highlight');
+					}
+				});
+				return;
+			}
+
+			el.classList.add('active-highlight');
+		};
+
+		targets.forEach((target) => {
+			target.addEventListener('mouseenter', (event: Event) => {
+				if (!(event instanceof MouseEvent)) return;
+				const text = target.getAttribute('data-tooltip') || '';
+				const bounds = canvas.getBoundingClientRect();
+				setHighlight(target);
+				showTooltip(text, event.clientX - bounds.left, event.clientY - bounds.top);
+			});
+
+			target.addEventListener('mousemove', (event: Event) => {
+				if (!(event instanceof MouseEvent)) return;
+				if (tooltip.classList.contains('hidden')) return;
+				const bounds = canvas.getBoundingClientRect();
+				tooltip.style.left = `${event.clientX - bounds.left}px`;
+				tooltip.style.top = `${event.clientY - bounds.top}px`;
+			});
+
+			target.addEventListener('mouseleave', () => {
+				clearHighlight();
+				hideTooltip();
+			});
+
+			target.addEventListener('focus', () => {
+				const text = target.getAttribute('data-tooltip') || '';
+				const bounds = canvas.getBoundingClientRect();
+				const rect = target.getBoundingClientRect();
+				setHighlight(target);
+				showTooltip(
+					text,
+					rect.left - bounds.left + rect.width / 2,
+					rect.top - bounds.top,
+				);
+			});
+
+			target.addEventListener('blur', () => {
+				clearHighlight();
+				hideTooltip();
+			});
+		});
+	})();
+</script>

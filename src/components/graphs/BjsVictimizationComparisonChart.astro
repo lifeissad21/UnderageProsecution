@@ -1,0 +1,186 @@
+---
+import ReferenceSup from '../ReferenceSup.astro';
+
+const rows = [
+	{ label: 'U.S. total', v2012: 9.5, v2018: 7.1, significant: true },
+	{ label: 'Youth-on-youth', v2012: 2.5, v2018: 1.9, significant: true },
+	{ label: 'Staff sexual misconduct', v2012: 7.7, v2018: 5.8, significant: true },
+];
+
+const max = 10;
+const axisTicks = [0, 2, 4, 6, 8, 10];
+
+function widthPct(value: number): string {
+	return `${(value / max) * 100}%`;
+}
+---
+
+<figure id="bjs-victimization-comparison" class="bjs-compare my-4 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
+	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
+		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
+			Bureau of Justice Statistics · NSYC
+		</p>
+		<h4 class="mt-1 text-[1.05rem] font-bold leading-tight text-black sm:text-[1.1rem]">
+			Percent of youth in juvenile facilities reporting sexual victimization, 2012 and 2018
+		</h4>
+		<p class="mt-1 text-[0.82rem] leading-relaxed text-black/50">
+			Comparison across major victimization categories reported by youth in custody.
+		</p>
+	</div>
+
+	<div class="px-4 py-5 sm:px-6 md:px-8">
+		<div class="mb-4 flex flex-wrap items-center gap-4 text-[0.75rem] font-semibold text-black/70 sm:gap-5">
+			<span class="inline-flex items-center gap-2">
+				<span class="h-2.5 w-4 rounded-sm bg-[#C53E3E]"></span>
+				2012*
+			</span>
+			<span class="inline-flex items-center gap-2">
+				<span class="h-2.5 w-4 rounded-sm bg-[#627A8C]"></span>
+				2018
+			</span>
+			<span class="text-[0.68rem] font-normal text-black/35">† Significant difference at 95% confidence</span>
+		</div>
+
+		<div class="space-y-5">
+			{rows.map((row) => (
+				<div>
+					<div class="mb-1 text-[1rem] font-semibold text-black/85">{row.label}</div>
+					<div class="bar-area">
+						<div class="axis-grid" aria-hidden="true">
+							{axisTicks.map((tick) => <span style={`left:${(tick / max) * 100}%`}></span>)}
+						</div>
+						<div class="bar-row">
+							<div class="bar b2012" style={`width:${widthPct(row.v2012)}`}></div>
+						</div>
+						<div class="bar-row mt-1.5">
+							<div class="bar b2018" style={`width:${widthPct(row.v2018)}`}></div>
+							{row.significant && <span class="sig">†</span>}
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+
+		<div class="mt-4 border-t border-black/12 pt-2">
+			<div class="relative h-5 text-[0.82rem] text-black/55">
+				{axisTicks.map((tick) => (
+					<span class="axis-label" style={`left:${(tick / max) * 100}%`}>{tick}</span>
+				))}
+			</div>
+			<p class="mt-0.5 text-center text-[0.82rem] font-semibold uppercase tracking-[0.08em] text-black/55">Percent</p>
+		</div>
+	</div>
+
+	<div class="border-t border-black/8 bg-black/[0.015] px-4 py-3 sm:px-6 md:px-8">
+		<p class="text-[0.65rem] leading-relaxed text-black/40">
+			Note: Based on 6,049 interviews of youth in 2018 and 8,707 interviews of youth in 2012.
+			Details may not sum to totals due to youth reporting multiple types of victimization.
+			* Comparison group. † Difference with comparison group is significant at the 95% confidence level.
+		</p>
+		<p class="mt-1 text-[0.65rem] leading-relaxed text-black/40">
+			Source: Bureau of Justice Statistics, National Survey of Youth in Custody, 2012 and 2018
+			<ReferenceSup number={35} href="https://bjs.ojp.gov/document/pdca24.pdf" label="Bureau of Justice Statistics — Sexual Victimization in Juvenile Facilities (Report)" />.
+		</p>
+	</div>
+</figure>
+
+<style>
+	.bjs-compare .bar-area {
+		position: relative;
+	}
+
+	.bjs-compare .axis-grid {
+		bottom: 0;
+		left: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.bjs-compare .axis-grid span {
+		border-left: 1px solid rgb(15 23 42 / 0.16);
+		bottom: 0;
+		position: absolute;
+		top: 0;
+	}
+
+	.bjs-compare .bar-row {
+		align-items: center;
+		display: flex;
+		gap: 0.35rem;
+		height: 2rem;
+		position: relative;
+	}
+
+	.bjs-compare .bar {
+		border-radius: 0.2rem;
+		height: 100%;
+		opacity: 0;
+		transform-origin: left;
+		transform: scaleX(0);
+	}
+
+	.bjs-compare.loaded .bar {
+		animation: morphFillBar 0.8s ease-out forwards;
+	}
+
+	.bjs-compare .b2012 {
+		background: #C53E3E;
+	}
+
+	.bjs-compare .b2018 {
+		background: #627A8C;
+	}
+
+	@keyframes morphFillBar {
+		0% {
+			opacity: 0;
+			transform: scaleX(0);
+		}
+		50% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 1;
+			transform: scaleX(1);
+		}
+	}
+
+	.bjs-compare.loaded .b2012 {
+		animation-delay: 0.1s;
+	}
+
+	.bjs-compare.loaded .b2018 {
+		animation-delay: 0.2s;
+	}
+
+	.bjs-compare .sig {
+		color: rgb(0 0 0 / 0.82);
+		font-size: 1.6rem;
+		line-height: 1;
+	}
+
+	.bjs-compare .axis-label {
+		position: absolute;
+		top: 0;
+		transform: translateX(-50%);
+	}
+</style>
+
+<script>
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('loaded');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, {
+		threshold: 0.2
+	});
+
+	const chart = document.getElementById('bjs-victimization-comparison');
+	if (chart) {
+		observer.observe(chart);
+	}
+</script>

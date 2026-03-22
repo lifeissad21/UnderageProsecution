@@ -1,6 +1,8 @@
 ---
 import ChapterDivider from '../ChapterDivider.astro';
 import ReferenceSup from '../ReferenceSup.astro';
+import CurrentProsecutionFlowDiagram from '../graphs/CurrentProsecutionFlowDiagram.astro';
+import BjsVictimizationComparisonChart from '../graphs/BjsVictimizationComparisonChart.astro';
 ---
 
 <ChapterDivider
@@ -20,119 +22,191 @@ import ReferenceSup from '../ReferenceSup.astro';
 		</h3>
 
 		<p>
-			<!-- TODO (Minh): Describe the current legal pathway for prosecuting underage individuals.
-			     Walk through the steps from arrest through adjudication in both juvenile and adult
-			     courts, including diversion programs and transfer hearings. -->
-			Placeholder: Explain the full prosecution pathway as it currently operates.
-		</p>
-
-		<!-- Pull quote -->
-		<div class="py-4">
-			<div class="mb-6 w-20 border-t-2 border-[#c1121f]"></div>
-			<p class="text-[1.35rem] font-bold leading-snug text-black">
-				<!-- TODO (Minh): Update pull quote -->
-				"Placeholder pull quote for prosecution pathway."
-			</p>
-		</div>
-
-		<p>
-			<!-- TODO (Minh): Continue with additional analysis of the prosecution pathway. -->
-			Placeholder: Discuss key decision points — charging decisions, transfer criteria,
-			plea negotiation — and how each shapes the outcome for a young defendant.
-		</p>
-
-		<!-- ─────────────────────────────────────────────── -->
-		<!-- Subchapter: Teen Pregnancy Prosecution          -->
-		<!-- ─────────────────────────────────────────────── -->
-		<h3 id="prosecution-teen-pregnancy" class="pt-8 text-2xl font-bold text-black">
-			Teen Pregnancy Prosecution
-		</h3>
-
-		<p>
-			<!-- TODO (Minh): Write the teen pregnancy prosecution section. Address the specific
-			     legal and social dynamics around prosecution cases involving teen pregnancy,
-			     including statutory offenses and related charges. -->
-			Placeholder: Address how teen pregnancy intersects with prosecution — including
-			statutory rape laws, fetal harm statutes, and the minors involved on both sides.
+			While the details differ from state to state, the juvenile justice system in the United
+			States is typically separate from the adult criminal justice system
+			<ReferenceSup number={24} href="https://ojjdp.ojp.gov/juvenile-justice-101" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice 101" />.
+			After being arrested, a young person is usually either released to a parent or guardian or detained
+			<ReferenceSup number={24} href="https://ojjdp.ojp.gov/juvenile-justice-101" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice 101" />.
 		</p>
 
 		<p>
-			<!-- TODO (Minh): Continue with analysis and examples. -->
-			Placeholder: Additional analysis of how these cases are handled across different states.
+			In 2021, <strong>56% of youth referred to court received a hearing</strong>
+			<ReferenceSup number={23} href="https://www.ojjdp.gov/ojstatbb//court/JCSCF_Display.asp" label="OJJDP Statistical Briefing Book — Court Statistics" />.
+			If the hearing leads to adjudication, the juvenile judge, without a jury, determines whether
+			the youth is delinquent beyond a reasonable doubt
+			<ReferenceSup number={25} href="https://www.ojjdp.gov/ojstatbb//glossary.html" label="OJJDP Statistical Briefing Book — Glossary" />
+			<ReferenceSup number={26} href="https://law.justia.com/codes/georgia/2020/title-15/chapter-11/article-6/part-10/section-15-11-582/" label="Justia — Georgia Code § 15-11-582" />.
 		</p>
-
-		<!-- ─────────────────────────────────────────────── -->
-		<!-- Subchapter: Sample Case                         -->
-		<!-- ─────────────────────────────────────────────── -->
-		<h3 id="prosecution-sample-case" class="pt-8 text-2xl font-bold text-black">
-			Sample Case
-		</h3>
 
 		<p>
-			<!-- TODO (Minh): Present a representative or illustrative sample case from the current
-			     era, showing how the prosecution pathway plays out in practice. Include case facts,
-			     charges, and outcome. -->
-			Placeholder: Describe a representative current-era case that illustrates the dynamics
-			explored in this chapter.
+			In 2021, <strong>48% of petitioned youth were adjudicated</strong>, and
+			<strong>28% of adjudicated youth were placed in a residential facility</strong>
+			<ReferenceSup number={23} href="https://www.ojjdp.gov/ojstatbb//court/JCSCF_Display.asp" label="OJJDP Statistical Briefing Book — Court Statistics" />.
+			If the youth is found delinquent and is not released, a disposition hearing determines outcomes
+			such as release, detention, probation, or other services
+			<ReferenceSup number={27} href="https://djj.georgia.gov/criminal-justice-process-juveniles" label="Georgia Department of Juvenile Justice — Criminal Justice Process for Juveniles" />.
 		</p>
+
+		<CurrentProsecutionFlowDiagram />
+
+		<p>
+			In some states, including Georgia, juveniles may be prosecuted as adults for severe crimes,
+			such as murder or armed robbery
+			<ReferenceSup number={28} href="https://www.dekalbda.org/divisions_special_units/special_units/sb440_unit/index.php" label="DeKalb County District Attorney — SB 440 Unit" />.
+			In 2021, there were <strong>approximately 2,800 U.S. youth</strong> transferred or waived into adult criminal court
+			<ReferenceSup number={23} href="https://www.ojjdp.gov/ojstatbb//court/JCSCF_Display.asp" label="OJJDP Statistical Briefing Book — Court Statistics" />.
+		</p>
+
+		<p>
+			The overall process is also represented in OJJDP's national pathway diagram
+			<ReferenceSup number={29} href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice Process Diagram" />.
+		</p>
+
+		<figure class="relative left-1/2 w-[min(100vw-1.25rem,74rem)] max-w-none -translate-x-1/2 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
+			<img
+				src="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif"
+				alt="Flow pathway of the juvenile justice process"
+				loading="lazy"
+				class="h-auto w-full p-4"
+			/>
+			<figcaption class="border-t border-black/8 px-4 py-3 text-sm italic text-black/60 sm:px-5">
+				Flow pathway of the juvenile justice process. Taken from ojjdp.diagram_img
+				<ReferenceSup number={29} popoverEnabled={false} href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice Process Diagram" />.
+			</figcaption>
+		</figure>
 
 		<blockquote class="border-l-4 border-[#c1121f] pl-6 italic text-black/70">
-			<!-- TODO (Minh): Insert a key quote from the case record, ruling, or advocate statement. -->
-			"Placeholder quote from case record or legal ruling."
+			"The juvenile justice system is not part of the criminal justice system. In most jurisdictions,
+			it includes separate judges and separate courtrooms from the adult system."
+			<ReferenceSup number={24} href="https://ojjdp.ojp.gov/juvenile-justice-101" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice 101" />
 		</blockquote>
 
-		<p>
-			<!-- TODO (Minh): Connect the case back to broader themes. -->
-			Placeholder: Draw out the lessons and implications from this case for the larger argument.
-		</p>
-
-		<!-- ─────────────────────────────────────────────── -->
-		<!-- Subchapter: "Kids You Throw Away" — HRW         -->
-		<!-- ─────────────────────────────────────────────── -->
-		<h3 id="prosecution-hrw" class="pt-8 text-2xl font-bold text-black">
-			"Kids You Throw Away": New Jersey's Indiscriminate Prosecution of Children as Adults
-		</h3>
-
-		<p class="text-sm font-semibold uppercase tracking-[0.14em] text-black/40">
-			Source: Human Rights Watch
-		</p>
-
-		<p>
-			<!-- TODO: Summarize key findings from the Human Rights Watch report on New Jersey's
-			     practice of automatically prosecuting children as adults without individualized review.
-			     Reference: https://www.hrw.org/report/2018/10/09/kids-you-throw-away/
-			     delinquent-children-new-jersey-adult-court -->
-			Placeholder: Summarize the HRW findings on New Jersey's automatic-transfer law and
-			its disproportionate impact on youth of color.
-		</p>
-
-		<!-- HRW Key Findings block -->
-		<div class="rounded-md border border-black/10 bg-white p-6">
-			<p class="text-sm font-semibold uppercase tracking-wide text-black/40">HRW — Key Findings</p>
-			<ul class="mt-4 space-y-3 text-base text-black">
-				<li><!-- TODO: HRW Finding 1 --> Placeholder finding</li>
-				<li><!-- TODO: HRW Finding 2 --> Placeholder finding</li>
-				<li><!-- TODO: HRW Finding 3 --> Placeholder finding</li>
-			</ul>
-		</div>
-
-		<!-- ─────────────────────────────────────────────── -->
-		<!-- Subchapter: Trends                              -->
-		<!-- ─────────────────────────────────────────────── -->
-		<h3 id="prosecution-trends" class="pt-8 text-2xl font-bold text-black">
-			Trends
+		<h3 id="prosecution-overview" class="pt-8 text-2xl font-bold text-black">
+			Overview
 		</h3>
 
 		<p>
-			<!-- TODO: Describe current national and state-level trends in underage prosecution.
-			     Include shifts toward or away from adult-court transfers, legislative changes,
-			     and any data on declining or rising prosecution rates. -->
-			Placeholder: Outline the measurable trends shaping where underage prosecution is headed.
+			The Juvenile Justice and Delinquency Prevention Act includes major protections for youth
+			<ReferenceSup number={24} href="https://ojjdp.ojp.gov/juvenile-justice-101" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice 101" />:
+		</p>
+
+		<ul class="list-disc space-y-2 pl-6 text-black">
+			<li>Juveniles should not be held in adult jails and lockups.</li>
+			<li>If juveniles are held in adult facilities, they cannot see or hear adult inmates.</li>
+			<li>Juveniles should not be detained for status offenses.</li>
+			<li>States must work to reduce racial and ethnic disparities within youth justice systems.</li>
+		</ul>
+
+		<p>
+			OJJDP also notes that many states use Balanced and Restorative Justice (BARJ), which focuses
+			on public safety, youth skill development, and accountability to victims and communities
+			<ReferenceSup number={24} href="https://ojjdp.ojp.gov/juvenile-justice-101" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice 101" />.
+		</p>
+
+		<h3 id="prosecution-teen-pregnancy" class="pt-8 text-2xl font-bold text-black">
+			Underage Prosecution, Pregnancy, and Risks in Detention
+		</h3>
+
+		<h4 class="text-xl font-bold text-black">
+			Criminalization of Pregnancy and Related Offenses
+		</h4>
+
+		<p>
+			While underage pregnancy itself is not directly prosecuted, minors may still face criminal
+			charges related to their pregnancy or its outcome. Laws originally designed for other purposes
+			are often applied in these cases, particularly when a pregnancy ends or is concealed.
 		</p>
 
 		<p>
-			<!-- TODO: Continue trends analysis. -->
-			Placeholder: Additional trend data and analysis.
+			For example, in Nebraska, <strong>Celeste Burgess</strong>, a 17-year-old, was sentenced to
+			"three months in jail" and "two years of probation" for disposing of a fetus after a
+			self-managed abortion, while her mother faced up to five years in prison for assisting her
+			<ReferenceSup number={32} href="https://www.bbc.co.uk/news/world-us-canada-66271537" label="BBC News — Nebraska Teen Sentenced Over Abortion Case" />.
+		</p>
+
+		<p>
+			These prosecutions often rely on laws such as:
+		</p>
+
+		<ul class="list-disc space-y-2 pl-6 text-black">
+			<li>Abuse of a corpse</li>
+			<li>Concealing a birth</li>
+			<li>Manslaughter</li>
+			<li>Chemical endangerment of a child</li>
+			<li>Practicing medicine without a license</li>
+		</ul>
+
+		<p>
+			Although these laws are not explicitly written to target minors, they are frequently applied
+			in situations where young individuals experience fear, lack of access to care, or limited
+			knowledge of legal and medical systems.
+		</p>
+
+		<h4 class="pt-6 text-xl font-bold text-black">
+			Sexual Victimization of Youth in Detention
+		</h4>
+
+		<p>
+			Youth placed in detention facilities face a significant risk of sexual abuse. According to
+			the Bureau of Justice Statistics (BJS), <strong>7.1% of youth in juvenile correctional facilities
+			reported sexual victimization in 2018</strong>
+			<ReferenceSup number={33} href="https://bjs.ojp.gov/content/pub/pdf/svryjf18_sum.pdf" label="Bureau of Justice Statistics — Sexual Victimization Reported by Youth in Juvenile Facilities, 2018 (Summary)" />.
+		</p>
+
+		<p>
+			Although this represents a decline from earlier years - <strong>12% in 2009</strong> and
+			<strong>9.5% in 2012</strong> - the rates remain alarmingly high
+			<ReferenceSup number={34} href="https://bjs.ojp.gov/sites/g/files/xyckuh236/files/media/document/svjfry09pr.pdf" label="Bureau of Justice Statistics — Sexual Victimization in Juvenile Facilities, 2009" />
+			<ReferenceSup number={35} href="https://bjs.ojp.gov/document/pdca24.pdf" label="Bureau of Justice Statistics — Sexual Victimization in Juvenile Facilities (Report)" />.
+		</p>
+
+		<p>
+			Notably, youth in juvenile facilities experience <strong>higher rates of sexual victimization
+			than adults in prisons (4.0%) or jails (3.2%)</strong>
+			<ReferenceSup number={35} href="https://bjs.ojp.gov/document/pdca24.pdf" label="Bureau of Justice Statistics — Sexual Victimization in Juvenile Facilities (Report)" />.
+		</p>
+
+		<p>
+			Even more concerning, <strong>less than 10% of minors who experience sexual abuse report it</strong>,
+			suggesting that actual rates may be significantly higher than documented
+			<ReferenceSup number={36} href="https://childsafety.losangelescriminallawyer.pro/minors-in-prison.html" label="Child Safety Legal Resource — Minors in Prison" />.
+		</p>
+
+		<BjsVictimizationComparisonChart />
+
+		<h4 class="pt-6 text-xl font-bold text-black">
+			Risks in Adult Facilities
+		</h4>
+
+		<p>
+			When juveniles are placed in adult facilities, the risks increase dramatically. Federal law
+			notes that <strong>juveniles are five times more likely to be sexually assaulted in adult
+			facilities than in juvenile facilities</strong>, often within the first 48 hours of incarceration
+			<ReferenceSup number={37} href="https://uscode.house.gov/view.xhtml?req=(title:34%20section:30301%20edition:prelim)" label="U.S. Code — 34 U.S.C. § 30301" />.
+		</p>
+
+		<p>
+			This highlights the dangers of prosecuting youth as adults, particularly when considering
+			the physical and psychological risks associated with incarceration.
+		</p>
+
+		<h4 class="pt-6 text-xl font-bold text-black">
+			Family and Pregnancy in Detention
+		</h4>
+
+		<p>
+			Data from the Office of Juvenile Justice and Delinquency Prevention shows that
+			<strong>12% of youth in custody report currently expecting a child</strong>, and
+			<strong>20% either have or are expecting children</strong>
+			<ReferenceSup number={38} href="https://www.ojp.gov/pdffiles1/ojjdp/227730.pdf" label="Office of Juvenile Justice and Delinquency Prevention — Youth in Custody and Pregnancy Data" />.
+		</p>
+
+		<p>
+			This reflects the broader reality that many incarcerated youth are navigating complex family,
+			health, and socioeconomic challenges - factors that are often overlooked in punitive justice
+			approaches. Related national reporting on custody-related pregnancy and birth outcomes is also
+			tracked by the Prison Policy Initiative
+			<ReferenceSup number={39} href="https://www.prisonpolicy.org/blog/2025/07/01/jail_births_media_project/" label="Prison Policy Initiative — Jail Births Media Project" />.
 		</p>
 
 	</article>
