@@ -128,14 +128,13 @@ const renderedLinks = links.map((link) => {
 						data-link-from={link.from}
 						data-link-to={link.to}
 						data-tooltip={link.tooltip}
-						tabindex="0"
 					></path>
 				))}
 			</g>
 
 			<g>
 				{nodes.map((node) => (
-					<g class="hover-target" data-hover="true" data-role="node" data-node-id={node.id} data-tooltip={node.tooltip} tabindex="0">
+					<g class="hover-target" data-hover="true" data-role="node" data-node-id={node.id} data-tooltip={node.tooltip}>
 						<rect
 							x={node.x}
 							y={node.y}
@@ -183,7 +182,7 @@ const renderedLinks = links.map((link) => {
 		</p>
 		<p class="mt-1 text-[0.7rem] leading-relaxed text-black/50">
 			Source: OJJDP Statistical Briefing Book.
-			<ReferenceSup number={23} href="https://www.ojjdp.gov/ojstatbb/court/JCSCF_Display.asp?ID=qa06601&year=2021&group=1&estimate=1" label="OJJDP Statistical Briefing Book — Court Statistics (2021)" popoverEnabled={false} />
+			<ReferenceSup refId={22} popoverEnabled={false} />
 			December 22, 2023. Data Source: National Juvenile Court Data Archive. National Center for Juvenile Justice. Pittsburgh, PA.
 		</p>
 	</div>

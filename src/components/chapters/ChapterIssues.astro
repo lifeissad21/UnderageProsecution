@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import ChapterDivider from '../ChapterDivider.astro';
 import ReferenceSup from '../ReferenceSup.astro';
 import VictimizationChart from '../graphs/VictimizationChart.astro';
@@ -46,13 +47,16 @@ import VictimizationChart from '../graphs/VictimizationChart.astro';
 
 		<p>
 			The overall process is also represented in OJJDP's national pathway diagram
-			<ReferenceSup number={29} href="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif" label="Office of Juvenile Justice and Delinquency Prevention — Juvenile Justice Process Diagram" />.
+			<ReferenceSup refId={28} />.
 		</p>
 
 		<figure class="overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
-			<img
+			<Image
 				src="https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/images/2021-11/flowbluemedwebalt2.gif"
-				alt="Flow pathway of the juvenile justice process"
+				alt="Juvenile justice process flow diagram"
+				unoptimized
+				width={1200}
+				height={700}
 				loading="lazy"
 				class="h-auto w-full"
 			/>

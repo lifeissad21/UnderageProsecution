@@ -1,49 +1,50 @@
 ---
+import { getReference, getInTextCitation } from '../data/references';
+
 interface Props {
-	number: number;
-	href: string;
-	label: string;
+	refId: number;
 	popoverEnabled?: boolean;
 }
 
-const { number, href, label, popoverEnabled = true } = Astro.props;
+const { refId, popoverEnabled = true } = Astro.props;
+const reference = getReference(refId);
+
+if (!reference) {
+	throw new Error(`Reference ${refId} not found in references database`);
+}
+
+const inTextCitation = getInTextCitation(refId);
 ---
 
-<span class="reference-sup ml-0.5 inline-block align-super text-[0.65em] leading-none">
+<span class="reference-sup inline" data-reference-sup>
 	<a
-		href={`#reference-${number}`}
+		href={`#reference-${refId}`}
 		class="font-semibold text-[#780000] transition-colors hover:text-[#c1121f]"
-		aria-label={`Reference ${number}: scroll to reference ${number}`}
+		aria-label={`Reference: ${inTextCitation}`}
 	>
-		{number}
+		{inTextCitation}
 	</a>
 	{popoverEnabled && (
-		<span class="reference-popover-wrap absolute left-full top-1/2 z-50 block w-[min(26rem,calc(100vw-2rem))] -translate-y-1/2 pl-3">
-			<span class="block rounded-md border border-black/10 bg-white p-3 text-xs normal-case leading-relaxed text-black shadow-lg">
-				<span class="block font-semibold text-black">Reference {number}</span>
-				<span class="mt-1 flex items-start gap-2">
-					<a
-						href={href}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="min-w-0 flex-1 text-[#780000] underline hover:text-[#c1121f]"
-					>
-						{label}
-					</a>
-					<span class="inline-flex shrink-0 flex-col items-center">
-						<button
-							type="button"
-							class="inline-flex h-7 w-7 items-center justify-center rounded border border-black/20 text-black hover:bg-black hover:text-white"
-							data-copy-link={href}
-							aria-label="Copy source URL"
-						>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-								<path d="M9 2a2 2 0 0 0-2 2v2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2h1a2 2 0 0 0 2-2V8l-6-6H9Zm5 1.5L18.5 8H15a1 1 0 0 1-1-1V3.5ZM9 4h3v3a3 3 0 0 0 3 3h3v10h-1V8a2 2 0 0 0-2-2H9V4Zm-3 4h9v12H6V8Z"/>
-							</svg>
-						</button>
-						<span class="mt-1 text-[9px] font-semibold uppercase tracking-wide text-[#780000] opacity-0 transition-opacity duration-150" data-copy-status>
-							Copied
-						</span>
+		<span class="reference-popover-wrap z-50 block w-[min(26rem,calc(100vw-2rem))]" data-reference-popover>
+			<span class="block rounded-md border border-black/10 bg-white p-3 text-xs normal-case leading-relaxed text-black shadow-lg whitespace-normal break-words">
+				<span class="block text-[0.8rem] leading-relaxed text-black [overflow-wrap:anywhere]">
+					{reference.fullCitation}
+				</span>
+				<span class="mt-2.5 flex flex-wrap items-center gap-1.5 text-[0.64rem] text-black/55" data-shortcut-instructions data-link-url={reference.url}>
+					<span class="inline-flex items-center gap-1 rounded border border-black/10 bg-black/[0.02] px-1.5 py-0.5">
+						<span class="font-semibold" data-modifier-label>Ctrl</span>
+						<span aria-hidden="true">+</span>
+						<kbd class="rounded border border-black/15 bg-white px-1 py-0 font-semibold text-black/85">C</kbd>
+						<span>copy link</span>
+					</span>
+					<span class="inline-flex items-center gap-1 rounded border border-black/10 bg-black/[0.02] px-1.5 py-0.5">
+						<span class="font-semibold" data-modifier-label>Ctrl</span>
+						<span aria-hidden="true">+</span>
+						<kbd class="rounded border border-black/15 bg-white px-1 py-0 font-semibold text-black/85">K</kbd>
+						<span>open source</span>
+					</span>
+					<span class="text-[#780000]/85 opacity-0 transition-opacity duration-150" data-shortcut-status>
+						Copied
 					</span>
 				</span>
 			</span>
@@ -57,10 +58,20 @@ const { number, href, label, popoverEnabled = true } = Astro.props;
 	}
 
 	.reference-popover-wrap {
+		position: fixed;
+		left: 0;
+		top: 0;
+		transform: translate3d(var(--popover-x, 0), var(--popover-y, 0), 0);
 		opacity: 0;
 		visibility: hidden;
 		pointer-events: none;
 		transition: opacity 180ms ease;
+	}
+
+	.reference-popover-wrap[data-active='true'] {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
 	}
 
 	@media (max-width: 1023px) {
@@ -71,13 +82,161 @@ const { number, href, label, popoverEnabled = true } = Astro.props;
 			bottom: 1rem;
 			transform: translateX(-50%);
 			width: min(26rem, calc(100vw - 2rem));
-			padding-left: 0;
 		}
 	}
-
-	.reference-sup:hover .reference-popover-wrap {
-		opacity: 1;
-		visibility: visible;
-		pointer-events: auto;
-	}
 </style>
+
+<script>
+	if (!window.__referencePopoverInit) {
+		window.__referencePopoverInit = true;
+		const desktopQuery = window.matchMedia('(max-width: 1023px)');
+		const viewportPadding = 12;
+		const pointerGap = 14;
+		const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+		const modifierLabel = isApplePlatform ? '⌘' : 'Ctrl';
+		let activeShortcutContext = null;
+
+		document.querySelectorAll('[data-modifier-label]').forEach((node) => {
+			node.textContent = modifierLabel;
+		});
+
+		const flashStatus = (context, message) => {
+			if (!context?.status) {
+				return;
+			}
+			context.status.textContent = message;
+			context.status.style.opacity = '1';
+			clearTimeout(context.statusTimer);
+			context.statusTimer = setTimeout(() => {
+				if (context.status) {
+					context.status.style.opacity = '0';
+				}
+			}, 1100);
+		};
+
+		const copyToClipboard = async (text) => {
+			try {
+				await navigator.clipboard.writeText(text);
+				return true;
+			} catch {
+				const input = document.createElement('textarea');
+				input.value = text;
+				input.setAttribute('readonly', '');
+				input.style.position = 'absolute';
+				input.style.left = '-9999px';
+				document.body.appendChild(input);
+				input.select();
+				const success = document.execCommand('copy');
+				document.body.removeChild(input);
+				return success;
+			}
+		};
+
+		document.addEventListener('keydown', async (event) => {
+			if (!activeShortcutContext?.url) {
+				return;
+			}
+
+			const modifierPressed = isApplePlatform ? event.metaKey : event.ctrlKey;
+			if (!modifierPressed) {
+				return;
+			}
+
+			const key = event.key.toLowerCase();
+			if (key === 'c') {
+				event.preventDefault();
+				const didCopy = await copyToClipboard(activeShortcutContext.url);
+				flashStatus(activeShortcutContext, didCopy ? 'Copied' : 'Copy failed');
+			}
+
+			if (key === 'k') {
+				event.preventDefault();
+				window.open(activeShortcutContext.url, '_blank', 'noopener,noreferrer');
+				flashStatus(activeShortcutContext, 'Opened');
+			}
+		});
+
+		const positionPopover = (popover, event) => {
+			if (desktopQuery.matches) {
+				return;
+			}
+
+			const rect = popover.getBoundingClientRect();
+			let x = event.clientX + pointerGap;
+			let y = event.clientY - rect.height / 2;
+
+			const maxX = window.innerWidth - rect.width - viewportPadding;
+			if (x > maxX) {
+				x = Math.max(viewportPadding, event.clientX - rect.width - pointerGap);
+			}
+
+			const maxY = window.innerHeight - rect.height - viewportPadding;
+			y = Math.max(viewportPadding, Math.min(y, maxY));
+
+			popover.style.setProperty('--popover-x', `${Math.round(x)}px`);
+			popover.style.setProperty('--popover-y', `${Math.round(y)}px`);
+		};
+
+		document.querySelectorAll('[data-reference-sup]').forEach((sup) => {
+			const popover = sup.querySelector('[data-reference-popover]');
+			const shortcuts = popover?.querySelector('[data-shortcut-instructions]');
+			const status = popover?.querySelector('[data-shortcut-status]');
+			if (!popover) {
+				return;
+			}
+
+			let overSup = false;
+			let overPopover = false;
+			let hideTimer;
+
+			const showPopover = (event) => {
+				clearTimeout(hideTimer);
+				popover.dataset.active = 'true';
+				activeShortcutContext = {
+					url: shortcuts?.dataset.linkUrl || '',
+					status,
+					statusTimer: undefined,
+				};
+				if (event) {
+					positionPopover(popover, event);
+				}
+			};
+
+			const hidePopover = () => {
+				clearTimeout(hideTimer);
+				hideTimer = setTimeout(() => {
+					if (!overSup && !overPopover) {
+						popover.dataset.active = 'false';
+						if (activeShortcutContext?.url === (shortcuts?.dataset.linkUrl || '')) {
+							activeShortcutContext = null;
+						}
+					}
+				}, 110);
+			};
+
+			sup.addEventListener('mouseenter', (event) => {
+				overSup = true;
+				showPopover(event);
+			});
+
+			sup.addEventListener('mousemove', (event) => {
+				showPopover(event);
+			});
+
+			sup.addEventListener('mouseleave', () => {
+				overSup = false;
+				hidePopover();
+			});
+
+			popover.addEventListener('mouseenter', () => {
+				overPopover = true;
+				clearTimeout(hideTimer);
+			});
+
+			popover.addEventListener('mouseleave', () => {
+				overPopover = false;
+				hidePopover();
+			});
+		});
+	}
+</script>
