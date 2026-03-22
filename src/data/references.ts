@@ -72,14 +72,6 @@ export const references: APAReference[] = [
     url: "https://ojjdp.ojp.gov/sites/g/files/xyckuh176/files/pubs/tryingjuvasadult/transfer.html",
   },
   {
-    id: 8,
-    author: "OJJDP",
-    year: 2024,
-    title: "Minimum Age of Criminal Responsibility FAQ",
-    fullCitation: "U.S. Department of Justice, Office of Juvenile Justice and Delinquency Prevention. (2024). Minimum age of criminal responsibility FAQ. Retrieved from https://ojjdp.ojp.gov/statistical-briefing-book/structure_process/faqs/qa04111",
-    url: "https://ojjdp.ojp.gov/statistical-briefing-book/structure_process/faqs/qa04111",
-  },
-  {
     id: 9,
     author: "Los Angeles Criminal Law Resource",
     year: 2024,
@@ -350,6 +342,14 @@ export const references: APAReference[] = [
     title: "Childhood Maltreatment and Juvenile Justice Outcomes",
     fullCitation: "Foy et al. (2014). Childhood maltreatment and juvenile justice outcomes. Law and Human Behavior. Retrieved from https://doi.org/10.1037/law0000002",
     url: "https://doi.org/10.1037/law0000002",
+  },
+  {
+    id: 46,
+    author: "Stevenson",
+    year: 2014,
+    title: "Just Mercy: A Story of Justice and Redemption",
+    fullCitation: "Stevenson, B. (2014). Just mercy: A story of justice and redemption. New York, NY: Spiegel & Grau. Retrieved from https://www.penguinrandomhouse.com/books/314982/just-mercy-by-bryan-stevenson/",
+    url: "https://www.penguinrandomhouse.com/books/314982/just-mercy-by-bryan-stevenson/",
   },
 ];
 

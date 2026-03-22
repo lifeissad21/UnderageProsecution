@@ -19,6 +19,7 @@ const inTextCitation = getInTextCitation(refId);
 <span class="reference-sup inline" data-reference-sup>
 	<a
 		href={`#reference-${refId}`}
+		data-reference-jump
 		class="font-semibold text-[#780000] transition-colors hover:text-[#c1121f]"
 		aria-label={`Reference: ${inTextCitation}`}
 	>
@@ -97,6 +98,7 @@ const inTextCitation = getInTextCitation(refId);
 
 	if (!win.__referencePopoverInit) {
 		win.__referencePopoverInit = true;
+		const RETURN_Y_KEY = 'referenceReturnY';
 		const desktopQuery = window.matchMedia('(max-width: 1023px)');
 		const viewportPadding = 12;
 		const pointerGap = 14;
@@ -186,9 +188,15 @@ const inTextCitation = getInTextCitation(refId);
 		};
 
 		document.querySelectorAll<HTMLElement>('[data-reference-sup]').forEach((sup) => {
+			const jumpLink = sup.querySelector<HTMLAnchorElement>('[data-reference-jump]');
 			const popover = sup.querySelector<HTMLElement>('[data-reference-popover]');
 			const shortcuts = popover?.querySelector<HTMLElement>('[data-shortcut-instructions]');
 			const status = popover?.querySelector<HTMLElement>('[data-shortcut-status]') ?? null;
+
+			jumpLink?.addEventListener('click', () => {
+				sessionStorage.setItem(RETURN_Y_KEY, String(Math.max(0, window.scrollY - 14)));
+			});
+
 			if (!popover) {
 				return;
 			}

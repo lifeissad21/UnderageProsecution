@@ -30,6 +30,15 @@ const sortedReferences = [...references].sort((a, b) => {
 			</li>
 		))}
 	</ol>
+	<button
+		type="button"
+		data-return-reading
+		aria-label="Return to previous reading position"
+		title="Return to previous reading position"
+		class="hidden fixed right-4 top-1/2 z-40 h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-black/15 bg-white text-2xl font-bold leading-none text-[#780000] shadow-lg transition-colors hover:bg-[#fff4f4] hover:text-[#c1121f]"
+	>
+		<span aria-hidden="true">↑</span>
+	</button>
 </section>
 
 <style>
@@ -61,6 +70,10 @@ const sortedReferences = [...references].sort((a, b) => {
 		animation: reference-highlight-fade 4s ease-out forwards;
 	}
 
+	.reference-item.is-highlighted .reference-entry {
+		animation: reference-highlight-fade 4s ease-out forwards;
+	}
+
 	.reference-item:target {
 		scroll-margin-top: 5.5rem;
 	}
@@ -77,3 +90,82 @@ const sortedReferences = [...references].sort((a, b) => {
 		}
 	}
 </style>
+
+<script>
+	(() => {
+		const RETURN_Y_KEY = 'referenceReturnY';
+		let isInReferencesSection = false;
+		const refItems = Array.from(document.querySelectorAll<HTMLElement>('#references .reference-item'));
+		const returnButton = document.querySelector<HTMLButtonElement>('[data-return-reading]');
+		const referencesSection = document.getElementById('references');
+
+		const highlightFromHash = () => {
+			const hash = window.location.hash;
+			if (!hash.startsWith('#reference-')) {
+				return;
+			}
+
+			const target = document.getElementById(hash.slice(1));
+			if (!target || !target.classList.contains('reference-item')) {
+				return;
+			}
+
+			refItems.forEach((item) => item.classList.remove('is-highlighted'));
+			void target.getBoundingClientRect();
+			target.classList.add('is-highlighted');
+		};
+
+		const toggleReturnButton = () => {
+			if (!returnButton) return;
+			const hasStoredPosition = sessionStorage.getItem(RETURN_Y_KEY) !== null;
+			const isAtPageBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+			const shouldShow = hasStoredPosition && (isInReferencesSection || isAtPageBottom);
+			returnButton.classList.toggle('hidden', !shouldShow);
+			returnButton.classList.toggle('flex', shouldShow);
+		};
+
+		if (returnButton) {
+			returnButton.addEventListener('click', () => {
+				const raw = sessionStorage.getItem(RETURN_Y_KEY);
+				if (!raw) return;
+				const y = Number(raw);
+				if (Number.isNaN(y)) return;
+
+				window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+				sessionStorage.removeItem(RETURN_Y_KEY);
+				setTimeout(() => {
+					history.replaceState(null, '', window.location.pathname + window.location.search);
+					toggleReturnButton();
+				}, 300);
+			});
+		}
+
+		window.addEventListener('hashchange', () => {
+			highlightFromHash();
+			toggleReturnButton();
+		});
+
+		window.addEventListener('scroll', () => {
+			toggleReturnButton();
+		}, { passive: true });
+
+		if (referencesSection && 'IntersectionObserver' in window) {
+			const sectionObserver = new IntersectionObserver(
+				([entry]) => {
+					isInReferencesSection = entry.isIntersecting;
+					toggleReturnButton();
+				},
+				{ threshold: 0.15 },
+			);
+			sectionObserver.observe(referencesSection);
+		}
+
+		window.addEventListener('load', () => {
+			highlightFromHash();
+			toggleReturnButton();
+		});
+
+		highlightFromHash();
+		toggleReturnButton();
+	})();
+</script>
