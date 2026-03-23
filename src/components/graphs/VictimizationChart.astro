@@ -1,39 +1,39 @@
 ---
 // Data: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 & 2018
-const MAX = 11; // percentage scale ceiling — slightly above 9.5% for breathing room
+const MAX = 11; // percentage scale ceiling - slightly above 9.5% for breathing room
 
 const rows = [
 	{
-		label:   "Total Prevalence Rate",
-		sub:     "All sexual victimization",
+		label:   'Total Prevalence Rate',
+		sub:     'All sexual victimization',
 		val2012: 9.5,
 		val2018: 7.1,
 		sig:     true,
 	},
 	{
-		label:   "Youth-on-Youth Victimization",
-		sub:     "Involving force or coercion",
+		label:   'Youth-on-Youth Victimization',
+		sub:     'Involving force or coercion',
 		val2012: 2.5,
 		val2018: 1.9,
 		sig:     true,
 	},
 	{
-		label:   "Staff Sexual Misconduct",
-		sub:     "All staff-involved incidents",
+		label:   'Staff Sexual Misconduct',
+		sub:     'All staff-involved incidents',
 		val2012: 7.7,
 		val2018: 5.8,
 		sig:     true,
 	},
 	{
-		label:   "Staff — With Force or Coercion",
-		sub:     "Force or coercion reported",
+		label:   'Staff - With Force or Coercion',
+		sub:     'Force or coercion reported',
 		val2012: 3.5,
 		val2018: 2.1,
 		sig:     true,
 	},
 	{
-		label:   "Staff — No Force or Coercion",
-		sub:     "Willing or unknown",
+		label:   'Staff - No Force or Coercion',
+		sub:     'Willing or unknown',
 		val2012: 4.7,
 		val2018: 3.9,
 		sig:     false,
@@ -55,16 +55,16 @@ function pctChange(v2012: number, v2018: number): number {
 	aria-label="Horizontal bar chart: Youth reporting sexual victimization in juvenile facilities, 2012 vs 2018"
 	role="figure"
 >
-	<!-- ── Header ────────────────────────────────────────── -->
+	<!-- Header -->
 	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
 		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
-			Bureau of Justice Statistics · NSYC
+			Bureau of Justice Statistics - NSYC
 		</p>
 		<h4 class="mt-1 text-[1.05rem] font-bold leading-tight text-black">
 			Youth Reporting Sexual Victimization in Juvenile Facilities
 		</h4>
 		<p class="mt-0.5 text-[0.82rem] text-black/45">
-			Percent of youth reporting, by incident type — 2012 &amp; 2018
+			Percent of youth reporting, by incident type - 2012 and 2018
 		</p>
 
 		<!-- Legend -->
@@ -83,9 +83,9 @@ function pctChange(v2012: number, v2018: number): number {
 		</div>
 	</div>
 
-	<!-- ── Chart body ────────────────────────────────────── -->
+	<!-- Chart body -->
 	<div class="px-4 py-5 sm:px-6 sm:py-6 md:px-8">
-		<ul class="space-y-6 list-none p-0 m-0" role="list">
+		<ul class="m-0 list-none space-y-6 p-0" role="list">
 			{rows.map((row, i) => {
 				const change = pctChange(row.val2012, row.val2018);
 				const w2012  = barWidth(row.val2012);
@@ -95,12 +95,11 @@ function pctChange(v2012: number, v2018: number): number {
 
 				return (
 					<li class="bar-row" style={`--i: ${i};`}>
-						<!-- Row header: label + delta badge -->
 						<div class="mb-2 flex flex-col items-start gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
 							<div>
 								<span class="text-[0.82rem] font-bold text-black">
 									{row.label}
-									{row.sig && <sup class="ml-0.5 text-[0.65em] text-black/40" title="Statistically significant difference from 2012">†</sup>}
+									{row.sig && <sup class="ml-0.5 text-[0.65em] text-black/40" title="Statistically significant difference from 2012">+</sup>}
 								</span>
 								<span class="mt-0.5 block text-[0.73rem] text-black/40 sm:ml-1.5 sm:mt-0 sm:inline">{row.sub}</span>
 							</div>
@@ -109,7 +108,6 @@ function pctChange(v2012: number, v2018: number): number {
 							</span>
 						</div>
 
-						<!-- 2012 bar -->
 						<div class="mb-1.5 flex items-center gap-3">
 							<span class="w-8 shrink-0 text-right text-[9px] font-semibold uppercase tracking-wide text-black/30">
 								2012
@@ -126,7 +124,6 @@ function pctChange(v2012: number, v2018: number): number {
 							</span>
 						</div>
 
-						<!-- 2018 bar -->
 						<div class="flex items-center gap-3">
 							<span class="w-8 shrink-0 text-right text-[9px] font-semibold uppercase tracking-wide text-black/30">
 								2018
@@ -147,26 +144,24 @@ function pctChange(v2012: number, v2018: number): number {
 			})}
 		</ul>
 
-		<!-- Scale axis -->
 		<div aria-hidden="true" class="ml-11 mt-4 flex justify-between border-t border-black/8 pr-[3.25rem] pt-2">
-			{[0, 2.5, 5.0, 7.5, 10.0].map(v => (
+			{[0, 2.5, 5.0, 7.5, 10.0].map((v) => (
 				<span class="text-[9px] tabular-nums text-black/25">{v}%</span>
 			))}
 		</div>
 	</div>
 
-	<!-- ── Source footnote ───────────────────────────────── -->
+	<!-- Source footnote -->
 	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
 		<p class="text-[0.65rem] leading-relaxed text-black/30">
-			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 &amp; 2018 (Table 1).
-			† Difference from 2012 is statistically significant at the 5% significance level.
+			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 and 2018 (Table 1).
+			Difference from 2012 is statistically significant at the 5% significance level.
 			* 2012 figures may not sum to subtotals due to rounding.
 		</p>
 	</div>
 </figure>
 
 <style>
-	/* ── Bar animation ── */
 	.bar {
 		width: 0;
 		transition: width 950ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -177,13 +172,10 @@ function pctChange(v2012: number, v2018: number): number {
 		width: var(--w);
 	}
 
-	/* ── Row slide-in animation ── */
 	.bar-row {
 		opacity: 0;
 		transform: translateX(-14px);
-		transition:
-			opacity  500ms ease,
-			transform 500ms ease;
+		transition: opacity 500ms ease, transform 500ms ease;
 		transition-delay: calc(var(--i, 0) * 90ms);
 	}
 
