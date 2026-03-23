@@ -38,7 +38,10 @@ import { formattedReferences } from '../data/formattedReferences';
 	.reference-entry {
 		--hanging-indent: 2rem;
 		display: block;
-		padding-left: var(--hanging-indent);
+		padding-left: calc(var(--hanging-indent) + 1rem);
+		padding-right: 1.5rem;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
 		text-indent: calc(-1 * var(--hanging-indent));
 		border-radius: 0.375rem;
 		background-color: transparent;
